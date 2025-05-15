@@ -99,7 +99,7 @@ public class UserService {
 
   public void transferMoney(Long userId, String pin, String accountNumber, double money) {
     try {
-      this.accountService.updateBalanceByAccountNumber(userId, pin, accountNumber, -1 * money);
+      this.accountService.updateBalanceByAccountNumber(userId, pin, accountNumber, money);
     } catch (Exception e) {
       throw new IllegalArgumentException("Transfer failed: " + e.getMessage());
     }

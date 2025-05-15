@@ -1,91 +1,99 @@
-// package group20.example.demo.entity;
+package group20.example.demo.entity;
 
-// import jakarta.persistence.*;
-// import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 
-// @Entity
-// @Table(name = "transactions")
-// public class Transaction {
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Builder;
 
-// @Id
-// @GeneratedValue(strategy = GenerationType.IDENTITY)
-// @Column(name = "transaction_id")
-// private Long transactionId;
+@Entity
+@Table(name = "transactions")
+public class Transaction {
 
-// @Column(name = "account_number")
-// private String accountNumber;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "transaction_id")
+  private Long transactionId;
 
-// @Column(name = "transaction_type")
-// private String transactionType;
+  @Column(name = "account_number")
+  private String accountNumber;
 
-// @Column(name = "date_created")
-// private LocalDateTime dateCreated;
+  @Column(name = "transaction_type")
+  private String transactionType;
 
-// @Column(name = "description")
-// private String description;
+  @Column(name = "date_created")
+  private LocalDateTime dateCreated;
 
-// // Constructors
-// public Transaction() {
-// }
+  @Column(name = "description")
+  private String description;
 
-// public Transaction(String accountNumber, String transactionType,
-// LocalDateTime dateCreated, String description) {
-// this.accountNumber = accountNumber;
-// this.transactionType = transactionType;
-// this.dateCreated = dateCreated;
-// this.description = description;
-// }
+  // Constructors
+  public Transaction() {
+  }
 
-// // Getters and setters
-// public Long getTransactionId() {
-// return transactionId;
-// }
+  @Builder
+  public Transaction(String accountNumber, String transactionType,
+      LocalDateTime dateCreated, String description) {
+    this.accountNumber = accountNumber;
+    this.transactionType = transactionType;
+    this.dateCreated = dateCreated;
+    this.description = description;
+  }
 
-// public void setTransactionId(Long transactionId) {
-// this.transactionId = transactionId;
-// }
+  // Getters and setters
+  public Long getTransactionId() {
+    return transactionId;
+  }
 
-// public String getAccountNumber() {
-// return accountNumber;
-// }
+  public void setTransactionId(Long transactionId) {
+    this.transactionId = transactionId;
+  }
 
-// public void setAccountNumber(String accountNumber) {
-// this.accountNumber = accountNumber;
-// }
+  public String getAccountNumber() {
+    return accountNumber;
+  }
 
-// public String getTransactionType() {
-// return transactionType;
-// }
+  public void setAccountNumber(String accountNumber) {
+    this.accountNumber = accountNumber;
+  }
 
-// public void setTransactionType(String transactionType) {
-// this.transactionType = transactionType;
-// }
+  public String getTransactionType() {
+    return transactionType;
+  }
 
-// public LocalDateTime getDateCreated() {
-// return dateCreated;
-// }
+  public void setTransactionType(String transactionType) {
+    this.transactionType = transactionType;
+  }
 
-// public void setDateCreated(LocalDateTime dateCreated) {
-// this.dateCreated = dateCreated;
-// }
+  public LocalDateTime getDateCreated() {
+    return dateCreated;
+  }
 
-// public String getDescription() {
-// return description;
-// }
+  public void setDateCreated(LocalDateTime dateCreated) {
+    this.dateCreated = dateCreated;
+  }
 
-// public void setDescription(String description) {
-// this.description = description;
-// }
+  public String getDescription() {
+    return description;
+  }
 
-// // toString()
-// @Override
-// public String toString() {
-// return "Transaction{" +
-// "transactionId=" + transactionId +
-// ", accountNumber='" + accountNumber + '\'' +
-// ", transactionType='" + transactionType + '\'' +
-// ", dateCreated=" + dateCreated +
-// ", description='" + description + '\'' +
-// '}';
-// }
-// }
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  // toString()
+  @Override
+  public String toString() {
+    return "Transaction{" +
+        "transactionId=" + transactionId +
+        ", accountNumber='" + accountNumber + '\'' +
+        ", transactionType='" + transactionType + '\'' +
+        ", dateCreated=" + dateCreated +
+        ", description='" + description + '\'' +
+        '}';
+  }
+}

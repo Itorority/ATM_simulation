@@ -1,19 +1,24 @@
 package group20.example.demo.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import group20.example.demo.entity.Account;
+import group20.example.demo.entity.Transaction;
 import group20.example.demo.repo.AccountRepository;
 
 @Service
 public class AccountService {
   @Autowired
-  private AccountRepository accountRepository;
+  public AccountRepository accountRepository;
   @Autowired
-  private ATMService atmService;
+  public ATMService atmService;
+
+  @Autowired
+  public TransactionService transactionService;
 
   public AccountService(AccountRepository accountRepository) {
     this.accountRepository = accountRepository;
@@ -71,6 +76,21 @@ public class AccountService {
     if (!this.atmService.checkAmountATM(-1 * balance)) {
       throw new IllegalArgumentException("Invalid amount of ATM for doing transaction ");
     }
+    if (balance < 0) {
+      // save transaction
+      Transaction transaction = new Transaction(account.getAccountNumber(), "WITHDRAW",
+          LocalDateTime.now(), "Rút tiền " + balance * -1 + " VND");
+      transactionService.saveTransaction(transaction);
+      System.out.println("Transaction saved successfully!");
+    }
+
+    if (balance > 0) {
+      // save transaction
+      Transaction transaction = new Transaction(account.getAccountNumber(), "DEPOSIT",
+          LocalDateTime.now(), "Nạp " + balance + ".000 VND vào tai khoản");
+      transactionService.saveTransaction(transaction);
+      System.out.println("Transaction saved successfully!");
+    }
 
     // update user balance
     BigDecimal newBalance = account.getBalance().add(BigDecimal.valueOf(balance));
@@ -102,7 +122,7 @@ public class AccountService {
     }
 
     // check balance of user want to transfer
-    if (sender.getBalance().compareTo(new BigDecimal(-1 * money)) < 0) {
+    if (sender.getBalance().compareTo(new BigDecimal(money)) < 0) {
       throw new IllegalArgumentException("Invalid balance ");
     }
     // check account is exist
@@ -114,13 +134,26 @@ public class AccountService {
     }
 
     // update số tiền của sender
-    BigDecimal senderBalance = sender.getBalance().add(BigDecimal.valueOf(money));
+    BigDecimal senderBalance = sender.getBalance().subtract(BigDecimal.valueOf(money));
     accountRepository.updateBalanceByUserId(sender.getUserId(), senderBalance);
+    // save transaction of sender
+    Transaction senderTransaction = new Transaction(sender.getAccountNumber(), "TRANSFER",
+        LocalDateTime.now(),
+        "Chuyển số tiền : " + money + ".000 VND vào tai khoản " + reciver.getAccountNumber() + " .");
+    transactionService.saveTransaction(senderTransaction);
+    System.out.println("Transaction saved successfully!");
 
     // lấy số tiền hiện tại của reciver
     BigDecimal reciverBalance = reciver.getBalance().add(BigDecimal.valueOf(money));
     // cập nhật lại vào tài khoản của người gửi
     accountRepository.updateBalanceByUserId(reciver.getUserId(), reciverBalance);
+
+    // save transaction of reciver
+    Transaction reciverTransaction = new Transaction(reciver.getAccountNumber(), "TRANSFER",
+        LocalDateTime.now(), "Nhận số tiền : " + money + ".000 VND từ tài khoản "
+            + sender.getAccountNumber() + " .");
+    transactionService.saveTransaction(reciverTransaction);
+    System.out.println("Transaction saved successfully!");
 
   }
 
