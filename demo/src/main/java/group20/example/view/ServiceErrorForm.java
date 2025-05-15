@@ -1,4 +1,4 @@
-package group20;
+package group20.example.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
