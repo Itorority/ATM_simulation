@@ -1,1 +1,92 @@
+package group20;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
+
+public class ServiceErrorForm extends JFrame {
+
+	public ServiceErrorForm() {
+		setTitle("ATM - Out of Service");
+		setLocationRelativeTo(null);
+		setSize(800, 600);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
+		initUI();
+	}
+
+	private void initUI() {
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.setBackground(new Color(220, 220, 220));
+		setContentPane(panel);
+
+		JPanel jpTop = new JPanel(new BorderLayout());
+		jpTop.setOpaque(false);
+		jpTop.setBorder(new EmptyBorder(20, 30, 20, 30));
+
+		JLabel labLogo = new JLabel("ATM Simulator");
+		labLogo.setFont(new Font("Arial", Font.BOLD, 25));
+		jpTop.add(labLogo, BorderLayout.WEST);
+
+		JPanel jpHotline = new JPanel();
+		jpHotline.setLayout(new BoxLayout(jpHotline, BoxLayout.Y_AXIS));
+		jpHotline.setOpaque(false);
+
+		JLabel labHot1 = new JLabel("HOTLINE ATM");
+		labHot1.setFont(new Font("Arial", Font.PLAIN, 15));
+		JLabel labHot2 = new JLabel("1900 1010 - 1010 1900");
+		labHot2.setFont(new Font("Arial", Font.PLAIN, 15));
+		jpHotline.add(labHot1);
+		jpHotline.add(labHot2);
+
+		jpTop.add(jpHotline, BorderLayout.EAST);
+		panel.add(jpTop, BorderLayout.NORTH);
+
+		// Content Panel
+		JPanel contentPanel = new JPanel();
+		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+		contentPanel.setOpaque(false);
+
+		JLabel englishMessage1 = new JLabel("We apologize for the inconvenience");
+		JLabel englishMessage2 = new JLabel("The service cannot be processed at this time");
+
+		englishMessage1.setFont(new Font("Arial", Font.PLAIN, 25));
+		englishMessage1.setAlignmentX(Component.CENTER_ALIGNMENT);
+		englishMessage2.setFont(new Font("Arial", Font.PLAIN, 25));
+		englishMessage2.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+		JLabel vietnameseMessage1 = new JLabel("Xin lỗi quý khách");
+		JLabel vietnameseMessage2 = new JLabel("Dịch vụ không thể thực hiện trong lúc này");
+
+		vietnameseMessage1.setFont(new Font("Arial", Font.PLAIN, 25));
+		vietnameseMessage1.setAlignmentX(Component.CENTER_ALIGNMENT);
+		vietnameseMessage2.setFont(new Font("Arial", Font.PLAIN, 25));
+		vietnameseMessage2.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+		contentPanel.add(Box.createVerticalStrut(20));
+		contentPanel.add(englishMessage1);
+		contentPanel.add(englishMessage2);
+		contentPanel.add(Box.createVerticalStrut(15));
+		contentPanel.add(vietnameseMessage1);
+		contentPanel.add(vietnameseMessage2);
+
+		contentPanel.setBorder(new EmptyBorder(50, 0, 0, 0));
+		panel.add(contentPanel, BorderLayout.CENTER);
+	}
+
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(() -> {
+			new ServiceErrorForm().setVisible(true);
+		});
+	}
+}
 
