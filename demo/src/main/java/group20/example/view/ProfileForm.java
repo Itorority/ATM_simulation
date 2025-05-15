@@ -90,41 +90,41 @@ public class ProfileForm extends JFrame {
 		infoPanel.setBackground(Color.WHITE);
 
 		JLabel lblIdentity = new JLabel("Giấy tờ tùy thân");
-	    lblIdentity.setFont(new Font("Arial", Font.LAYOUT_LEFT_TO_RIGHT, 20));
-	    lblIdentity.setAlignmentX(Component.LEFT_ALIGNMENT);
+		lblIdentity.setFont(new Font("Arial", Font.LAYOUT_LEFT_TO_RIGHT, 20));
+		lblIdentity.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-	    JPanel lineIdentity = new JPanel();
-	    lineIdentity.setPreferredSize(new Dimension(0, 1)); 
-	    lineIdentity.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1)); 
-	    lineIdentity.setBackground(Color.GRAY); 
+		JPanel lineIdentity = new JPanel();
+		lineIdentity.setPreferredSize(new Dimension(0, 1));
+		lineIdentity.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
+		lineIdentity.setBackground(Color.GRAY);
 
-	    JLabel lblEmail = new JLabel("Email");
-	    lblEmail.setFont(new Font("Arial", Font.LAYOUT_LEFT_TO_RIGHT, 20));
-	    lblEmail.setAlignmentX(Component.LEFT_ALIGNMENT);
+		JLabel lblEmail = new JLabel("Email");
+		lblEmail.setFont(new Font("Arial", Font.LAYOUT_LEFT_TO_RIGHT, 20));
+		lblEmail.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-	    JPanel lineEmail = new JPanel();
-	    lineEmail.setPreferredSize(new Dimension(0, 1)); 
-	    lineEmail.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1)); 
-	    lineEmail.setBackground(Color.GRAY); 
+		JPanel lineEmail = new JPanel();
+		lineEmail.setPreferredSize(new Dimension(0, 1));
+		lineEmail.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
+		lineEmail.setBackground(Color.GRAY);
 
-	    JLabel lblChangePassword = new JLabel("Mã PIN");
-	    lblChangePassword.setFont(new Font("Arial", Font.LAYOUT_LEFT_TO_RIGHT, 20));
-	    lblChangePassword.setAlignmentX(Component.LEFT_ALIGNMENT);
+		JLabel lblChangePassword = new JLabel("Mã PIN");
+		lblChangePassword.setFont(new Font("Arial", Font.LAYOUT_LEFT_TO_RIGHT, 20));
+		lblChangePassword.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-	    JPanel lineChangePassword = new JPanel();
-	    lineChangePassword.setPreferredSize(new Dimension(0, 1)); 
-	    lineChangePassword.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1)); 
-	    lineChangePassword.setBackground(Color.GRAY);
-	    
-	    infoPanel.add(Box.createVerticalStrut(20));
-	    infoPanel.add(lblIdentity);
-	    infoPanel.add(lineIdentity);
-	    infoPanel.add(Box.createVerticalStrut(20));
-	    infoPanel.add(lblEmail);
-	    infoPanel.add(lineEmail);
-	    infoPanel.add(Box.createVerticalStrut(20));
-	    infoPanel.add(lblChangePassword);
-	    infoPanel.add(lineChangePassword);
+		JPanel lineChangePassword = new JPanel();
+		lineChangePassword.setPreferredSize(new Dimension(0, 1));
+		lineChangePassword.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
+		lineChangePassword.setBackground(Color.GRAY);
+
+		infoPanel.add(Box.createVerticalStrut(20));
+		infoPanel.add(lblIdentity);
+		infoPanel.add(lineIdentity);
+		infoPanel.add(Box.createVerticalStrut(20));
+		infoPanel.add(lblEmail);
+		infoPanel.add(lineEmail);
+		infoPanel.add(Box.createVerticalStrut(20));
+		infoPanel.add(lblChangePassword);
+		infoPanel.add(lineChangePassword);
 
 		contentPanel.add(titleLabel);
 		contentPanel.add(Box.createVerticalStrut(20));
