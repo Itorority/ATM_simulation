@@ -1,4 +1,4 @@
-package view;
+package group20.example.demo.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -17,9 +17,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-public class PINForm extends JFrame {
-	public PINForm() {
-		setTitle("ATM - Nhập mã PIN");
+public class OTPForm extends JFrame {
+	public OTPForm() {
+		setTitle("ATM - Nhập mã OTP");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setSize(800, 600);
@@ -70,28 +70,28 @@ public class PINForm extends JFrame {
 
 		// nội dung trong center
 		JLabel labContent1 = new JLabel();
-		labContent1.setText("Xin vui lòng nhập mã PIN để đăng nhập");
+		labContent1.setText("Xin vui lòng nhập mã OTP để xác thực");
 		labContent1.setFont(new Font("Arial", Font.BOLD, 38));
 		labContent1.setAlignmentX(CENTER_ALIGNMENT);
 		JLabel labContent2 = new JLabel();
-		labContent2.setText("(Khách hàng vui lòng che tay khi nhập mã PIN)");
+		labContent2.setText("(Khách hàng vui lòng che tay khi nhập mã OTP)");
 		labContent2.setFont(new Font("Arial", Font.PLAIN, 30));
 		labContent2.setForeground(Color.RED);
 		labContent2.setAlignmentX(CENTER_ALIGNMENT);
 
-		// field de nhap ma PIN
-		JTextField textPIN = new JTextField(6);
-		textPIN.setMaximumSize(new Dimension(450, 50));
-		textPIN.setPreferredSize(new Dimension(450, 50));
-		textPIN.setMinimumSize(new Dimension(450, 50));
-		textPIN.setAlignmentX(CENTER_ALIGNMENT);
-		textPIN.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
+		// field de nhap ma OTP
+		JTextField textOTP = new JTextField(6);
+		textOTP.setMaximumSize(new Dimension(450, 50));
+		textOTP.setPreferredSize(new Dimension(450, 50));
+		textOTP.setMinimumSize(new Dimension(450, 50));
+		textOTP.setAlignmentX(CENTER_ALIGNMENT);
+		textOTP.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
 
 		jpCenter.add(labContent1);
 		jpCenter.add(Box.createVerticalStrut(20));
 		jpCenter.add(labContent2);
 		jpCenter.add(Box.createVerticalStrut(30));
-		jpCenter.add(textPIN);
+		jpCenter.add(textOTP);
 
 		jpCenter.add(Box.createVerticalGlue());
 
@@ -136,6 +136,6 @@ public class PINForm extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		new PINForm();
+		new OTPForm();
 	}
 }

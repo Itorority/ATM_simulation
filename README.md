@@ -49,3 +49,10 @@ public void functionName(String email, String pass) {
 ```
 
 ## ==> Các bạn code UI tạo 1 frame chính nhận vào `ApplicationContext context` từ `AtmSimulationApplication` khi khởi tạo UI chính và các frame con sẽ nhận từ frame chính để dùng lại.
+
+<hr/>
+## ** Trong file `demo\src\main\resources\application.properties` có 2 trường cần thay đổi ** 
+spring.datasource.username=
+==> là user name khi cài sql server thường là sa hoặc root 
+spring.datasource.password=
+==> là pasword khi các bạn cài sql

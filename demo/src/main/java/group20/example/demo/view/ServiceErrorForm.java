@@ -1,4 +1,4 @@
-package group20.example.view;
+package group20.example.demo.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -89,4 +89,3 @@ public class ServiceErrorForm extends JFrame {
 		});
 	}
 }
-
