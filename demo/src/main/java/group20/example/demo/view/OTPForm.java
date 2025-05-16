@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 public class OTPForm extends JFrame {
@@ -23,10 +24,9 @@ public class OTPForm extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setSize(800, 600);
+		setResizable(false);
 		initUI();
-
-		setVisible(true);
-
+		
 	}
 
 	private void initUI() {
@@ -136,6 +136,8 @@ public class OTPForm extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		new OTPForm();
+		SwingUtilities.invokeLater(() -> {
+			new OTPForm().setVisible(true);
+		});
 	}
 }

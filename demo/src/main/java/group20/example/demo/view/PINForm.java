@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 public class PINForm extends JFrame {
@@ -23,9 +24,9 @@ public class PINForm extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setSize(800, 600);
+		setResizable(false);
 		initUI();
 
-		setVisible(true);
 
 	}
 
@@ -136,6 +137,8 @@ public class PINForm extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		new PINForm();
+		 SwingUtilities.invokeLater(() -> {
+	            new PINForm().setVisible(true);
+	        });
 	}
 }
