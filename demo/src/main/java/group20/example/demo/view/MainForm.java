@@ -1,15 +1,24 @@
-package group20.example.view;
+package group20.example.demo.view;
 
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
-
-import java.awt.*;
 
 public class MainForm extends JFrame {
 
     private static MainForm instance;
 
-    private MainForm() {
+    public MainForm() {
         setTitle("ATM - Màn hình chính");
         setLocationRelativeTo(null);
         setSize(800, 600);
@@ -26,7 +35,7 @@ public class MainForm extends JFrame {
     }
 
     private void initUI() {
-    	
+
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(new Color(220, 220, 220));
         setContentPane(panel);
@@ -34,7 +43,7 @@ public class MainForm extends JFrame {
         JPanel jpTop = new JPanel(new BorderLayout());
         jpTop.setOpaque(false);
         jpTop.setBorder(new EmptyBorder(20, 30, 20, 30));
-        
+
         JLabel labLogo = new JLabel("ATM Simulator");
         labLogo.setFont(new Font("Arial", Font.BOLD, 25));
         jpTop.add(labLogo, BorderLayout.WEST);
@@ -80,7 +89,7 @@ public class MainForm extends JFrame {
         JButton doiPinBtn = new JButton("Đổi PIN");
         doiPinBtn.setBounds(450, 280, 200, 50);
 
-        for (JButton btn : new JButton[]{rutTienBtn, chuyenKhoanBtn, napTienBtn, doiPinBtn}) {
+        for (JButton btn : new JButton[] { rutTienBtn, chuyenKhoanBtn, napTienBtn, doiPinBtn }) {
             btn.setFont(new Font("Arial", Font.BOLD, 20));
             btn.setForeground(Color.WHITE);
             btn.setBackground(Color.BLUE);
@@ -89,7 +98,8 @@ public class MainForm extends JFrame {
 
         // Events
         rutTienBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Bạn đã chọn chức năng Rút tiền."));
-        chuyenKhoanBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Bạn đã chọn chức năng Chuyển khoản."));
+        chuyenKhoanBtn
+                .addActionListener(e -> JOptionPane.showMessageDialog(this, "Bạn đã chọn chức năng Chuyển khoản."));
         napTienBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Bạn đã chọn chức năng Nạp tiền."));
         doiPinBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Bạn đã chọn chức năng Đổi PIN."));
     }
@@ -98,5 +108,5 @@ public class MainForm extends JFrame {
         SwingUtilities.invokeLater(() -> {
             new MainForm().setVisible(true);
         });
-	}
+    }
 }
