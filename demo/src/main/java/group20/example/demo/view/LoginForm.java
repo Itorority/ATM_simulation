@@ -20,22 +20,27 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import org.springframework.context.ApplicationContext;
+
 public class LoginForm extends JFrame {
 
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
+    private final ApplicationContext context;
 
-    public LoginForm() {
+    public LoginForm(ApplicationContext context) {
+    	this.context = context;
+        initUI();
+    }
+
+    private void initUI() {
         setTitle("ATM - Đăng nhập");
         setSize(800, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
-        initUI();
-    }
-
-    private void initUI() {
+        
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.setBackground(new Color(220, 220, 220));
@@ -134,17 +139,11 @@ public class LoginForm extends JFrame {
 
         if (card.equals("123456789") && password.equals("1234")) {
             dispose(); // đóng cửa sổ đăng nhập
-            MainForm mainForm = MainForm.getInstance();
+            MainForm mainForm = MainForm.getInstance(context);
             mainForm.setLocationRelativeTo(null);
             mainForm.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Sai mã số thẻ hoặc password!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new LoginForm().setVisible(true);
-        });
     }
 }
