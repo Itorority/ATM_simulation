@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 public class WithDrawForm extends JFrame {
@@ -21,9 +22,9 @@ public class WithDrawForm extends JFrame {
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
+		setResizable(false);
 		initUI();
 
-		setVisible(true);
 	}
 
 	private void initUI() {
@@ -140,6 +141,8 @@ public class WithDrawForm extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		new WithDrawForm();
+		 SwingUtilities.invokeLater(() -> {
+	            new WithDrawForm().setVisible(true);
+	        });
 	}
 }
