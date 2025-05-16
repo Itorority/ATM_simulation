@@ -1,4 +1,4 @@
-package view;
+package group20.example.demo.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -106,24 +106,23 @@ public class WithDrawForm extends JFrame {
 		jpCenter.add(labContent);
 		jpCenter.add(Box.createVerticalStrut(50));
 		jpCenter.add(jpButtonWithDraw);
-		
+
 		jpCenter.add(Box.createVerticalGlue());
 
 		// bottom panel
 		JPanel jpBottom = new JPanel();
 		jpBottom.setLayout(new FlowLayout(FlowLayout.CENTER));
 		jpBottom.setOpaque(false);
-		
+
 		JLabel labContentCancel = new JLabel();
 		labContentCancel.setText("(Ấn huỷ bỏ để dừng giao dịch)");
 		labContentCancel.setFont(new Font("Arial", Font.PLAIN, 20));
 		jpBottom.add(labContentCancel);
-		
+
 		jpMain.add(jpTop, BorderLayout.NORTH);
 		jpMain.add(jpCenter, BorderLayout.CENTER);
 		jpMain.add(jpBottom, BorderLayout.SOUTH);
-		
-		
+
 	}
 
 	private JButton createButton(String text) {

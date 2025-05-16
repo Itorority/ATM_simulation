@@ -1,9 +1,17 @@
-package group20.example.view;
+package group20.example.demo.view;
 
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
-
-import java.awt.*;
 
 public class ATMErrorForm extends JFrame {
 
@@ -17,14 +25,14 @@ public class ATMErrorForm extends JFrame {
     }
 
     private void initUI() {
-    	JPanel panel = new JPanel(new BorderLayout());
+        JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(new Color(220, 220, 220));
         setContentPane(panel);
 
         JPanel jpTop = new JPanel(new BorderLayout());
         jpTop.setOpaque(false);
         jpTop.setBorder(new EmptyBorder(20, 30, 20, 30));
-        
+
         JLabel labLogo = new JLabel("ATM Simulator");
         labLogo.setFont(new Font("Arial", Font.BOLD, 25));
         jpTop.add(labLogo, BorderLayout.WEST);
