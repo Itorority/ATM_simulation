@@ -10,7 +10,7 @@ import group20.example.demo.repo.UserRepository;
 public class UserService {
 
   @Autowired(required = true)
-  private final UserRepository userRepository;
+  private UserRepository userRepository;
   @Autowired
   private AccountService accountService;
 
@@ -19,6 +19,13 @@ public class UserService {
   }
 
   // Kiểm tra người dùng có tồn tại không dựa vào email và password
+  /**
+   * Kiểm tra người dùng có tồn tại không dựa vào email và password
+   * 
+   * @param email
+   * @param password
+   * @return
+   */
   public Boolean existsByEmailAndPassword(String email, String password) {
     return userRepository.existsByEmailAndUserPassword(email, password);
   }

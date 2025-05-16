@@ -13,9 +13,9 @@ import group20.example.demo.repo.AccountRepository;
 @Service
 public class AccountService {
   @Autowired
-  public AccountRepository accountRepository;
+  private AccountRepository accountRepository;
   @Autowired
-  public ATMService atmService;
+  private ATMService atmService;
 
   @Autowired
   public TransactionService transactionService;
@@ -50,7 +50,7 @@ public class AccountService {
    * 
    * @param userId
    * @param balance
-   * @return int
+   * @return
    */
   public void updateBalanceByUserId(Long userId, String pin, double balance) {
     // check the input balance from user is correct

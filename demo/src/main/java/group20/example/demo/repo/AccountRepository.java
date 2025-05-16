@@ -41,7 +41,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
   @Modifying
   @Transactional
   @Query("UPDATE Account a SET a.balance = :balance WHERE a.userId = :userId")
-  void updateBalanceByUserId(@Param("userId") Long userId, @Param("balance") BigDecimal balance);
+  public void updateBalanceByUserId(@Param("userId") Long userId, @Param("balance") BigDecimal balance);
 
   /**
    * find account by account number

@@ -12,6 +12,7 @@ import group20.example.demo.repo.ATMRepository;
 @Service
 public class ATMService {
 
+  @Autowired
   private final ATMRepository atmRepository;
   private final Long ATM_ID = 1L;
 

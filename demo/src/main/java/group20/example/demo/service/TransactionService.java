@@ -13,7 +13,7 @@ import group20.example.demo.repo.TransantionRepository;
 @Service
 public class TransactionService {
   @Autowired
-  public TransantionRepository transactionRepository;
+  private TransantionRepository transactionRepository;
 
   /**
    * @param transactionRepository
