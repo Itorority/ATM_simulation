@@ -15,17 +15,24 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import org.springframework.context.ApplicationContext;
+
 public class ProfileForm extends JFrame {
-	public ProfileForm() {
+	private ApplicationContext context;
+//	private String name, id, email, pin, IDdoc;
+	
+	public ProfileForm(ApplicationContext context) {
+		this.context = context;
+		initUI();
+	}
+
+	private void initUI() {
 		setTitle("ATM - Out of Service");
 		setLocationRelativeTo(null);
 		setSize(800, 600);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
-		initUI();
-	}
 
-	private void initUI() {
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setBackground(new Color(220, 220, 220));
 		setContentPane(panel);
@@ -132,9 +139,9 @@ public class ProfileForm extends JFrame {
 		panel.add(contentPanel, BorderLayout.CENTER);
 	}
 
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(() -> {
-			new ProfileForm().setVisible(true);
-		});
-	}
+//	public static void main(String[] args) {
+//		SwingUtilities.invokeLater(() -> {
+//			new ProfileForm().setVisible(true);
+//		});
+//	}
 }

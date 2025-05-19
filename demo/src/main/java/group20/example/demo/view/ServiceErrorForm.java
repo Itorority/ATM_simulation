@@ -13,18 +13,23 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-public class ServiceErrorForm extends JFrame {
+import org.springframework.context.ApplicationContext;
 
-	public ServiceErrorForm() {
+public class ServiceErrorForm extends JFrame {
+	private ApplicationContext context;
+
+	public ServiceErrorForm(ApplicationContext context) {
+		this.context = context;
+		initUI();
+	}
+
+	private void initUI() {
 		setTitle("ATM - Out of Service");
 		setLocationRelativeTo(null);
 		setSize(800, 600);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
-		initUI();
-	}
 
-	private void initUI() {
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setBackground(new Color(220, 220, 220));
 		setContentPane(panel);
@@ -83,9 +88,9 @@ public class ServiceErrorForm extends JFrame {
 		panel.add(contentPanel, BorderLayout.CENTER);
 	}
 
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(() -> {
-			new ServiceErrorForm().setVisible(true);
-		});
-	}
+//	public static void main(String[] args) {
+//		SwingUtilities.invokeLater(() -> {
+//			new ServiceErrorForm().setVisible(true);
+//		});
+//	}
 }
