@@ -14,28 +14,39 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import org.springframework.context.ApplicationContext;
+
 public class MainForm extends JFrame {
 
     private static MainForm instance;
+    private final ApplicationContext context;
 
-    public MainForm() {
+    public MainForm(ApplicationContext context) {
+    	
+    	// Khao báo trường ApplicationContext
+    	this.context = context;
+
+        initUI();
+    }
+
+    public static MainForm getInstance(ApplicationContext context) {
+        if (instance == null) {
+            instance = new MainForm(context);
+        }
+        return instance;
+    }
+    
+    public ApplicationContext getApplicationContext() {
+    	return context;
+    }
+
+    private void initUI() {
         setTitle("ATM - Màn hình chính");
         setLocationRelativeTo(null);
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
-        initUI();
-    }
-
-    public static MainForm getInstance() {
-        if (instance == null) {
-            instance = new MainForm();
-        }
-        return instance;
-    }
-
-    private void initUI() {
-
+        
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(new Color(220, 220, 220));
         setContentPane(panel);
@@ -102,11 +113,5 @@ public class MainForm extends JFrame {
                 .addActionListener(e -> JOptionPane.showMessageDialog(this, "Bạn đã chọn chức năng Chuyển khoản."));
         napTienBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Bạn đã chọn chức năng Nạp tiền."));
         doiPinBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Bạn đã chọn chức năng Đổi PIN."));
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new MainForm().setVisible(true);
-        });
     }
 }

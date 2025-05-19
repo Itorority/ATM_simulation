@@ -3,6 +3,7 @@ package group20.example.demo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import javax.swing.SwingUtilities;
 
 @SpringBootApplication
 public class AtmSimulationApplication {
