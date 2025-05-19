@@ -16,18 +16,25 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import org.springframework.context.ApplicationContext;
+
 public class WithDrawForm extends JFrame {
-	public WithDrawForm() {
-		setTitle("ATM - Rút tiền");
-		setSize(800, 600);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-		setResizable(false);
+	
+	private ApplicationContext context;
+
+	public WithDrawForm(ApplicationContext context) {
+		this.context = context;
 		initUI();
 
 	}
 
 	private void initUI() {
+		setTitle("ATM - Rút tiền");
+		setSize(800, 600);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setResizable(false);
+		
 		// main panel
 		JPanel jpMain = new JPanel(new BorderLayout());
 		jpMain.setBackground(new Color(220, 220, 220));
@@ -140,9 +147,9 @@ public class WithDrawForm extends JFrame {
 
 	}
 
-	public static void main(String[] args) {
-		 SwingUtilities.invokeLater(() -> {
-	            new WithDrawForm().setVisible(true);
-	        });
-	}
+//	public static void main(String[] args) {
+//		 SwingUtilities.invokeLater(() -> {
+//	            new WithDrawForm().setVisible(true);
+//	        });
+//	}
 }
