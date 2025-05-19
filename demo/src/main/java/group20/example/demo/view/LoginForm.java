@@ -30,7 +30,7 @@ public class LoginForm extends JFrame {
     private final ApplicationContext context;
 
     public LoginForm(ApplicationContext context) {
-    	this.context = context;
+        this.context = context;
         initUI();
     }
 
@@ -40,7 +40,7 @@ public class LoginForm extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
-        
+
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.setBackground(new Color(220, 220, 220));

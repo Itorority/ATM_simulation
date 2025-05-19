@@ -3,6 +3,9 @@ package group20.example.demo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+
+import group20.example.demo.view.LoginForm;
+
 import javax.swing.SwingUtilities;
 
 @SpringBootApplication
@@ -14,9 +17,9 @@ public class AtmSimulationApplication {
 		System.out.println("Frame chính sẽ bắt đầu từ line tiếp theo");
 
 		SwingUtilities.invokeLater(() -> {
-            	LoginForm loginForm = new LoginForm(context);
-            	loginForm.setVisible(true);
-        	});
+			LoginForm loginForm = new LoginForm(context);
+			loginForm.setVisible(true);
+		});
 	}
 
 	// @Override
