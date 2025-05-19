@@ -3,9 +3,6 @@ package group20.example.demo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-
-import group20.example.demo.view.LoginForm;
-
 import javax.swing.SwingUtilities;
 
 @SpringBootApplication
