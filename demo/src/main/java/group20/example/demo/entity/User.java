@@ -30,6 +30,24 @@ public class User {
   @Column(name = "date_of_birth")
   private LocalDate dateOfBirth;
 
+  /**
+   * @param userId
+   * @param fullName
+   * @param email
+   * @param phoneNumber
+   * @param userPassword
+   * @param dateOfBirth
+   */
+  public User(Long userId, String fullName, String email, String phoneNumber, String userPassword,
+      LocalDate dateOfBirth) {
+    this.userId = userId;
+    this.fullName = fullName;
+    this.email = email;
+    this.phoneNumber = phoneNumber;
+    this.userPassword = userPassword;
+    this.dateOfBirth = dateOfBirth;
+  }
+
   // Getters and Setters
   public Long getUserId() {
     return userId;

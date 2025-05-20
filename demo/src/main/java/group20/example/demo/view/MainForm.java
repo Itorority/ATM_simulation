@@ -11,33 +11,32 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
+@Lazy
+@Component
 public class MainForm extends JFrame {
 
     private static MainForm instance;
-    private final ApplicationContext context;
 
-    public MainForm(ApplicationContext context) {
-    	
-    	// Khao báo trường ApplicationContext
-    	this.context = context;
+    @Autowired
+    public MainForm() {
+
+        // Khao báo trường ApplicationContext
 
         initUI();
     }
 
-    public static MainForm getInstance(ApplicationContext context) {
+    public static MainForm getInstance() {
         if (instance == null) {
-            instance = new MainForm(context);
+            instance = new MainForm();
         }
         return instance;
-    }
-    
-    public ApplicationContext getApplicationContext() {
-    	return context;
     }
 
     private void initUI() {
@@ -46,7 +45,7 @@ public class MainForm extends JFrame {
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
-        
+
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(new Color(220, 220, 220));
         setContentPane(panel);

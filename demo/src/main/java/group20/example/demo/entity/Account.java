@@ -1,7 +1,13 @@
 package group20.example.demo.entity;
 
-import jakarta.persistence.*;
 import java.math.BigDecimal;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "accounts")
@@ -17,6 +23,19 @@ public class Account {
 
   @Column(name = "pin_hash")
   private String pinHash;
+
+  /**
+   * @param userId
+   * @param accountNumber
+   * @param pinHash
+   * @param balance
+   */
+  public Account(Long userId, String accountNumber, String pinHash, BigDecimal balance) {
+    this.userId = userId;
+    this.accountNumber = accountNumber;
+    this.pinHash = pinHash;
+    this.balance = balance;
+  }
 
   @Column(name = "balance")
   private BigDecimal balance;
