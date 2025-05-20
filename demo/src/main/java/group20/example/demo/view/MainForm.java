@@ -108,10 +108,25 @@ public class MainForm extends JFrame {
         }
 
         // Events
-        rutTienBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Bạn đã chọn chức năng Rút tiền."));
-        chuyenKhoanBtn
-                .addActionListener(e -> JOptionPane.showMessageDialog(this, "Bạn đã chọn chức năng Chuyển khoản."));
-        napTienBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Bạn đã chọn chức năng Nạp tiền."));
-        doiPinBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Bạn đã chọn chức năng Đổi PIN."));
+        /* rutTienBtn.addActionListener(e -> {
+            WithDrawForm form = context.getBean(WithDrawForm.class);
+            form.setLocationRelativeTo(null);
+            form.setVisible(true);
+        });
+        chuyenKhoanBtn.addActionListener(e -> {
+                    WithDrawForm form = context.getBean(WithDrawForm.class);
+                    form.setLocationRelativeTo(null);
+                    form.setVisible(true);
+                });
+        napTienBtn.addActionListener(e -> {
+            WithDrawForm form = context.getBean(WithDrawForm.class);
+            form.setLocationRelativeTo(null);
+            form.setVisible(true);
+        });
+        doiPinBtn.addActionListener(e -> {
+            WithDrawForm form = context.getBean(WithDrawForm.class);
+            form.setLocationRelativeTo(null);
+            form.setVisible(true);
+        }); */
     }
 }
