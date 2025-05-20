@@ -1,57 +1,18 @@
 package group20.example.demo;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import javax.swing.SwingUtilities;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+@Configuration
+@ComponentScan(basePackages = "group20.example.demo")
+@EnableJpaRepositories(basePackages = "group20.example.demo.repo")
+@EntityScan(basePackages = "group20.example.demo.entity")
 @SpringBootApplication
 public class AtmSimulationApplication {
-
-	public static void main(String[] args) {
-
-		ApplicationContext context = SpringApplication.run(AtmSimulationApplication.class);
-
-	}
-
-	// @Override
-	// public void run(String... args) throws Exception {
-	// // TODO Auto-generated method stub
-	// try {
-	// String email = "21130349@st.hcmuaf.edu.vn";
-	// String password = "21130349";
-	// String pin = "123456";
-	// // String accountNumber = "1000000005";
-	// // Định dạng mong muốn
-	// // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd
-	// // HH:mm:ss.SSS");
-
-	// // Lấy thời gian hiện tại và định dạng
-	// // LocalDateTime currentDateTime = LocalDateTime.now();
-	// // String formattedDateTime = currentDateTime.format(formatter);
-	// // Transaction transaction = new Transaction(accountNumber, "withdraw",
-	// // currentDateTime,
-	// // "withdraw 100.000 VND money");
-	// // transactionService.saveTransaction(transaction);
-	// // List<Transaction> transactions = transactionService
-	// // .getAllTransactionsByAccountNumber(accountNumber, 10);
-	// // transactions.forEach(t -> System.out.println("Description: " +
-	// // t.getDescription()));
-	// // boolean isExist = userService.existsByEmailAndPassword(email, password);
-	// // if (isExist) {
-	// // User user = userService.findByEmailAndPassword(email, password);
-	// // Long userId = user.getUserId();
-	// // // userService.withdrawMoney(userId, pin, 9999);
-	// // userService.depositMoney(userId, pin, 9999);
-	// // // userService.transferMoney(userId, pin, accountNumber, 1);1
-
-	// // } else {
-	// // System.out.println("Account not found");
-	// // }
-	// // } catch (Exception e) {
-	// // // TODO: handle exception
-	// // System.out.println("Error: ======================" + e.getMessage());
-	// // }
-	// }
-
+  public static void main(String[] args) {
+    org.springframework.boot.SpringApplication.run(AtmSimulationApplication.class, args);
+  }
 }

@@ -17,21 +17,33 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import group20.example.demo.service.AccountService;
+import group20.example.demo.service.TransactionService;
+import group20.example.demo.service.UserService;
+
+@org.springframework.stereotype.Component
 public class LoginForm extends JFrame {
 
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
-    private final ApplicationContext context;
 
-    public LoginForm(ApplicationContext context) {
-    	this.context = context;
-        initUI();
+    @Autowired
+    public LoginForm() {
+
+        try {
+            System.out.println("LoginForm constructor started...");
+            initUI();
+            System.out.println("LoginForm constructor finished.");
+        } catch (Exception e) {
+            System.err.println("Exception in LoginForm constructor:");
+            e.printStackTrace();
+            throw e; // nhớ re-throw lại để Spring biết
+        }
     }
 
     private void initUI() {
@@ -40,7 +52,7 @@ public class LoginForm extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
-        
+
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.setBackground(new Color(220, 220, 220));
@@ -134,16 +146,39 @@ public class LoginForm extends JFrame {
     }
 
     private void onLogin() {
-        String card = usernameField.getText();
-        String password = new String(passwordField.getPassword());
+        // Khởi tạo Spring context
+        try {
 
-        if (card.equals("123456789") && password.equals("1234")) {
-            dispose(); // đóng cửa sổ đăng nhập
-            MainForm mainForm = MainForm.getInstance(context);
-            mainForm.setLocationRelativeTo(null);
-            mainForm.setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(this, "Sai mã số thẻ hoặc password!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            String email = usernameField.getText().trim();
+            String password = new String(passwordField.getPassword()).trim();
+
+            if (UserService.getInstance().existsByEmailAndPassword(email, password)) {
+                dispose(); // đóng cửa sổ đăng nhập
+                MainForm mainForm = MainForm.getInstance();
+                mainForm.setLocationRelativeTo(null);
+                mainForm.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Sai mã số thẻ hoặc password!", "Lỗi",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Lỗi",
+                    JOptionPane.ERROR_MESSAGE);
         }
+
+    }
+
+    public static void main(String[] args) {
+
+        UserService.insertData();
+        AccountService.insertData();
+        TransactionService.insertData();
+
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            LoginForm login = new LoginForm();
+            login.setVisible(true);
+        });
     }
 }

@@ -7,18 +7,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import group20.example.demo.entity.ATM;
-import group20.example.demo.repo.ATMRepository;
 
 @Service
 public class ATMService {
-
+  public static ATM atmData = new ATM(new BigDecimal("1000000.00"), 1, "active");
   @Autowired
-  private final ATMRepository atmRepository;
   private final Long ATM_ID = 1L;
+  public static final ATMService atmService = new ATMService();
 
   @Autowired
-  public ATMService(ATMRepository atmRepository) {
-    this.atmRepository = atmRepository;
+  public ATMService() {
+  }
+
+  public static ATMService getInstance() {
+    if (atmService == null) {
+      return new ATMService();
+    }
+    return atmService;
   }
 
   /**
@@ -27,7 +32,7 @@ public class ATMService {
    * @param atmId
    */
   public ATM findByAtmId() {
-    return atmRepository.findByAtmId(ATM_ID);
+    return atmData;
   }
 
   /**
@@ -43,7 +48,7 @@ public class ATMService {
       throw new RuntimeException("ATM không tồn tại với id: " + ATM_ID);
     }
     BigDecimal newAmount = atm.getAmount().add(BigDecimal.valueOf(amount));
-    atmRepository.updateAmountById(ATM_ID, newAmount);
+    atm.setAmount(newAmount);
   }
 
   /**

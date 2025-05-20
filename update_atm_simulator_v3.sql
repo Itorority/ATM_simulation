@@ -45,7 +45,7 @@ create table accounts (
     user_id int  ,
     account_number varchar(20) UNIQUE ,
     pin_hash varchar(10),
-    balance DECIMAL(18,2) DEFAULT 0 -- min value -9999999999999999.99 to max value9999999999999999.99
+    balance DECIMAL(18,2)   -- min value -9999999999999999.99 to max value9999999999999999.99
 )
 
 -- Giả sử bảng users đã có các user_id tương ứng
@@ -92,7 +92,7 @@ VALUES
 select * from transactions ;
 -- create atm table 
 create table atm (
-    amount DECIMAL(18,2) DEFAULT 0,
+    amount DECIMAL(18,2) ,
     atm_id INT IDENTITY(1,1)    ,
     atm_status  VARCHAR(10) CHECK (atm_status IN ('Active', 'Inactive', 'Maintance'))
 )
