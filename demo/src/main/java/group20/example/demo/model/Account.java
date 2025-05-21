@@ -23,6 +23,7 @@ public class Account {
 
 	/**
 	 * Kiểm tra mã PIN nhập vào
+	 * nam mô adi da phat
 	 */
 	public boolean checkPin(String enteredPin) {
 		if (enteredPin.equals(this.pin)) {
