@@ -35,6 +35,22 @@ public class Transaction {
   public Transaction() {
   }
 
+  /**
+   * @param transactionId
+   * @param accountNumber
+   * @param transactionType
+   * @param dateCreated
+   * @param description
+   */
+  public Transaction(Long transactionId, String accountNumber, String transactionType, LocalDateTime dateCreated,
+      String description) {
+    this.transactionId = transactionId;
+    this.accountNumber = accountNumber;
+    this.transactionType = transactionType;
+    this.dateCreated = dateCreated;
+    this.description = description;
+  }
+
   @Builder
   public Transaction(String accountNumber, String transactionType,
       LocalDateTime dateCreated, String description) {

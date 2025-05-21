@@ -1,5 +1,6 @@
 package group20.example.demo;
 
+
 import javax.swing.SwingUtilities;
 
 import org.springframework.boot.SpringApplication;
@@ -22,5 +23,6 @@ public class AtmSimulationApplication {
 		});
 
 	}
+
 
 }

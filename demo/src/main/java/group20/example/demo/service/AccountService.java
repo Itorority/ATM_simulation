@@ -2,26 +2,46 @@ package group20.example.demo.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import group20.example.demo.entity.Account;
 import group20.example.demo.entity.Transaction;
-import group20.example.demo.repo.AccountRepository;
 
 @Service
 public class AccountService {
   @Autowired
-  private AccountRepository accountRepository;
-  @Autowired
   private ATMService atmService;
+  public static List<Account> accountsData = new ArrayList<>();
+  public static final AccountService accountService = new AccountService();
 
-  @Autowired
-  public TransactionService transactionService;
+  public AccountService() {
 
-  public AccountService(AccountRepository accountRepository) {
-    this.accountRepository = accountRepository;
+  }
+
+  public static AccountService getInstance() {
+    if (accountService == null) {
+      return new AccountService();
+    }
+    return accountService;
+  }
+
+  public static void insertData() {
+    accountsData.add(new Account(1L, "1000000001", "098231", new BigDecimal("500.00")));
+    accountsData.add(new Account(2L, "1000000002", "124412", new BigDecimal("1000.00")));
+    accountsData.add(new Account(3L, "1000000003", "124256", new BigDecimal("750.50")));
+    accountsData.add(new Account(4L, "1000000004", "245214", new BigDecimal("250.00")));
+    accountsData.add(new Account(5L, "1000000005", "234521", new BigDecimal("0.00")));
+
+    accountsData.add(new Account(6L, "1000000006", "123456", new BigDecimal("0.00")));
+    accountsData.add(new Account(7L, "1000000007", "123456", new BigDecimal("0.00")));
+    accountsData.add(new Account(8L, "1000000008", "123456", new BigDecimal("0.50")));
+    accountsData.add(new Account(9L, "1000000009", "123456", new BigDecimal("0.00")));
+    accountsData.add(new Account(10L, "1000000010", "123456", new BigDecimal("0.00")));
+    accountsData.add(new Account(11L, "1000000011", "123456", new BigDecimal("0.00")));
   }
 
   /**
@@ -31,7 +51,8 @@ public class AccountService {
    * @return true nếu tài khoản tồn tại, false nếu không
    */
   public Boolean isAccountExist(Long userId) {
-    return accountRepository.existsByUserId(userId);
+    // return accountRepository.existsByUserId(userId);
+    return accountsData.stream().anyMatch(account -> account.getUserId().equals(userId));
   }
 
   /**
@@ -42,7 +63,8 @@ public class AccountService {
    * @return Account
    */
   public Account findAccountById(Long userId) {
-    return accountRepository.findByUserId(userId);
+    // return accountRepository.findByUserId(userId);
+    return accountsData.stream().filter(account -> account.getUserId().equals(userId)).findFirst().orElse(null);
   }
 
   /**
@@ -80,7 +102,7 @@ public class AccountService {
       // save transaction
       Transaction transaction = new Transaction(account.getAccountNumber(), "WITHDRAW",
           LocalDateTime.now(), "Rút tiền " + balance * -1 + " VND");
-      transactionService.saveTransaction(transaction);
+      TransactionService.getInstance().saveTransaction(transaction);
       System.out.println("Transaction saved successfully!");
     }
 
@@ -88,14 +110,17 @@ public class AccountService {
       // save transaction
       Transaction transaction = new Transaction(account.getAccountNumber(), "DEPOSIT",
           LocalDateTime.now(), "Nạp " + balance + ".000 VND vào tai khoản");
-      transactionService.saveTransaction(transaction);
+      TransactionService.getInstance().saveTransaction(transaction);
       System.out.println("Transaction saved successfully!");
     }
 
     // update user balance
     BigDecimal newBalance = account.getBalance().add(BigDecimal.valueOf(balance));
     System.out.println("New balance: " + newBalance);
-    accountRepository.updateBalanceByUserId(userId, newBalance);
+    // accountRepository.updateBalanceByUserId(userId, newBalance);
+    // update balance of account
+    accountsData.stream().filter(account1 -> account1.getUserId().equals(userId)).findFirst()
+        .ifPresent(account1 -> account1.setBalance(newBalance));
 
     // update ATM Amount
     this.atmService.updateAmount(balance);
@@ -126,7 +151,8 @@ public class AccountService {
       throw new IllegalArgumentException("Invalid balance ");
     }
     // check account is exist
-    Account reciver = accountRepository.findByAccountNumber(accountNumber);
+    Account reciver = accountsData.stream()
+        .filter(account -> account.getAccountNumber().equals(accountNumber)).findFirst().orElse(null);
     // check account null
     if (reciver == null) {
       throw new IllegalArgumentException("Account not found for account number: " + accountNumber);
@@ -135,24 +161,27 @@ public class AccountService {
 
     // update số tiền của sender
     BigDecimal senderBalance = sender.getBalance().subtract(BigDecimal.valueOf(money));
-    accountRepository.updateBalanceByUserId(sender.getUserId(), senderBalance);
+    // update
+    accountsData.stream().filter(account1 -> account1.getUserId().equals(userId)).findFirst()
+        .ifPresent(account1 -> account1.setBalance(senderBalance));
     // save transaction of sender
+
     Transaction senderTransaction = new Transaction(sender.getAccountNumber(), "TRANSFER",
         LocalDateTime.now(),
         "Chuyển số tiền : " + money + ".000 VND vào tai khoản " + reciver.getAccountNumber() + " .");
-    transactionService.saveTransaction(senderTransaction);
+    TransactionService.getInstance().saveTransaction(senderTransaction);
     System.out.println("Transaction saved successfully!");
 
     // lấy số tiền hiện tại của reciver
     BigDecimal reciverBalance = reciver.getBalance().add(BigDecimal.valueOf(money));
     // cập nhật lại vào tài khoản của người gửi
-    accountRepository.updateBalanceByUserId(reciver.getUserId(), reciverBalance);
-
+    accountsData.stream().filter(account1 -> account1.getUserId().equals(reciver.getUserId())).findFirst()
+        .ifPresent(account1 -> account1.setBalance(reciverBalance));
     // save transaction of reciver
     Transaction reciverTransaction = new Transaction(reciver.getAccountNumber(), "TRANSFER",
         LocalDateTime.now(), "Nhận số tiền : " + money + ".000 VND từ tài khoản "
             + sender.getAccountNumber() + " .");
-    transactionService.saveTransaction(reciverTransaction);
+    TransactionService.getInstance().saveTransaction(reciverTransaction);
     System.out.println("Transaction saved successfully!");
 
   }
