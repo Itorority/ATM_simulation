@@ -22,15 +22,21 @@ import javax.swing.border.EmptyBorder;
 
 import org.springframework.context.ApplicationContext;
 
+import group20.example.demo.controller.LoginController;
+import group20.example.demo.controller.UserController;
+import group20.example.demo.service.UserService;
+
 public class LoginForm extends JFrame {
 
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
     private final ApplicationContext context;
+    private final UserController userController;
 
     public LoginForm(ApplicationContext context) {
     	this.context = context;
+    	this.userController = context.getBean(UserController.class);
         initUI();
     }
 
@@ -136,14 +142,13 @@ public class LoginForm extends JFrame {
     private void onLogin() {
         String card = usernameField.getText();
         String password = new String(passwordField.getPassword());
+        LoginController loginController = new LoginController(context.getBean(UserService.class));
 
-        if (card.equals("123456789") && password.equals("1234")) {
-            dispose(); // đóng cửa sổ đăng nhập
-            MainForm mainForm = MainForm.getInstance(context);
-            mainForm.setLocationRelativeTo(null);
-            mainForm.setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(this, "Sai mã số thẻ hoặc password!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        try {
+            loginController.login(card, password, context);
+            dispose();
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
