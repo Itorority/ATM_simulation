@@ -18,19 +18,26 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import org.springframework.context.ApplicationContext;
+
 public class PINForm extends JFrame {
-	public PINForm() {
-		setTitle("ATM - Nhập mã PIN");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-		setSize(800, 600);
-		setResizable(false);
+	
+	private ApplicationContext context;
+	
+	public PINForm(ApplicationContext context) {
+		this.context = context;
 		initUI();
 
 
 	}
 
 	private void initUI() {
+		setTitle("ATM - Nhập mã PIN");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setSize(800, 600);
+		setResizable(false);
+		
 		// Main panel
 		JPanel jpMain = new JPanel(new BorderLayout());
 		jpMain.setBackground(new Color(220, 220, 220));
@@ -136,9 +143,9 @@ public class PINForm extends JFrame {
 		return btn;
 	}
 
-	public static void main(String[] args) {
-		 SwingUtilities.invokeLater(() -> {
-	            new PINForm().setVisible(true);
-	        });
-	}
+//	public static void main(String[] args) {
+//		 SwingUtilities.invokeLater(() -> {
+//	            new PINForm().setVisible(true);
+//	        });
+//	}
 }

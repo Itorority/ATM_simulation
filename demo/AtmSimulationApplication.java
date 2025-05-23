@@ -20,7 +20,6 @@ public class AtmSimulationApplication {
 			LoginForm loginForm = new LoginForm(context);
 			loginForm.setVisible(true);
 		});
-
 	}
 
 }
