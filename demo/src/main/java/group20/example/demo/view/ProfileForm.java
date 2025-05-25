@@ -1,147 +1,202 @@
 package group20.example.demo.view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import java.awt.*;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.Locale;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import org.springframework.context.ApplicationContext;
 
+import group20.example.demo.model.AccountModel;
+import group20.example.demo.model.UserModel;
+
+
 public class ProfileForm extends JFrame {
-	private ApplicationContext context;
-//	private String name, id, email, pin, IDdoc;
-	
-	public ProfileForm(ApplicationContext context) {
-		this.context = context;
-		initUI();
-	}
+    private ApplicationContext context;
+    private MainForm mainForm;
 
-	private void initUI() {
-		setTitle("ATM - Out of Service");
-		setLocationRelativeTo(null);
-		setSize(800, 600);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setResizable(false);
+    private UserModel user;
+    private AccountModel account;
 
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.setBackground(new Color(220, 220, 220));
-		setContentPane(panel);
+    private JLabel userLabel, userIDLabel, lblIdentity, lblEmail, lblChangePassword, lblBalance;
+    private JButton exitButton, logoutButton;
 
-		JPanel jpTop = new JPanel(new BorderLayout());
-		jpTop.setOpaque(false);
-		jpTop.setBorder(new EmptyBorder(20, 30, 20, 30));
+    public ProfileForm(ApplicationContext context, MainForm mainForm, UserModel user, AccountModel account) {
+        this.context = context;
+        this.mainForm = mainForm;
+        this.user = user;
+        this.account = account;
 
-		JLabel labLogo = new JLabel("ATM Simulator");
-		labLogo.setFont(new Font("Arial", Font.BOLD, 25));
-		jpTop.add(labLogo, BorderLayout.WEST);
+        initUI();
+        setUserInfo(user, account);
+    }
 
-		JPanel jpHotline = new JPanel();
-		jpHotline.setLayout(new BoxLayout(jpHotline, BoxLayout.Y_AXIS));
-		jpHotline.setOpaque(false);
+    public void setUserInfo(UserModel user, AccountModel account) {
+        userLabel.setText(user != null ? user.getFullName() : "Chưa rõ");
+        userIDLabel.setText("User ID: " + (user != null ? user.getUserId() : "N/A"));
+        lblEmail.setText("Email: " + (user != null ? user.getEmail() : "N/A"));
+        lblIdentity.setText("SĐT: " + (user != null ? user.getPhoneNumber() : "N/A"));
+        lblChangePassword.setText("Mã PIN: " + (account != null ? account.getPinHash() : "N/A"));
 
-		JLabel labHot1 = new JLabel("HOTLINE ATM");
-		labHot1.setFont(new Font("Arial", Font.PLAIN, 15));
-		JLabel labHot2 = new JLabel("1900 1010 - 1010 1900");
-		labHot2.setFont(new Font("Arial", Font.PLAIN, 15));
-		jpHotline.add(labHot1);
-		jpHotline.add(labHot2);
+        if (account != null && account.getBalance() != null) {
+            BigDecimal balance = account.getBalance();
+            NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
+            String formattedBalance = nf.format(balance) + " VNĐ";
+            lblBalance.setText("Số dư: " + formattedBalance);
+        } else {
+            lblBalance.setText("Số dư: 0 VNĐ");
+        }
+    }
 
-		jpTop.add(jpHotline, BorderLayout.EAST);
-		panel.add(jpTop, BorderLayout.NORTH);
+    private void initUI() {
+        setTitle("Hồ sơ người dùng");
+        setLocationRelativeTo(mainForm);
+        setSize(800, 600);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setResizable(false);
 
-		// Content Panel
-		JPanel contentPanel = new JPanel();
-		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-		contentPanel.setOpaque(false);
-		contentPanel.setBorder(new EmptyBorder(20, 150, 20, 150));
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+        mainPanel.setBackground(new Color(220, 220, 220));
+        setContentPane(mainPanel);
 
-		JLabel titleLabel = new JLabel("HỒ SƠ NGƯỜI DÙNG");
-		titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
-		titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // ===== Panel phía trên chứa logo và hotline =====
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
+        topPanel.setOpaque(false);
+        topPanel.setBorder(new EmptyBorder(20, 30, 20, 30));
 
-		JPanel profilePanel = new JPanel();
-		profilePanel.setLayout(new BoxLayout(profilePanel, BoxLayout.Y_AXIS));
-		profilePanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-		profilePanel.setBackground(Color.WHITE);
+        JLabel labLogo = new JLabel("ATM Simulator");
+        labLogo.setFont(new Font("Arial", Font.BOLD, 25));
+        topPanel.add(labLogo);
 
-		JLabel userLabel = new JLabel("NGUYEN VAN A");
-		userLabel.setFont(new Font("Arial", Font.BOLD, 25));
-		userLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        topPanel.add(Box.createHorizontalGlue()); // Hotline được đính sang bên phải 
 
-		JLabel userIDLabel = new JLabel("User ID: 092122xx");
-		userIDLabel.setFont(new Font("Arial", Font.PLAIN, 25));
-		userIDLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JPanel jpHotline = new JPanel();
+        jpHotline.setLayout(new BoxLayout(jpHotline, BoxLayout.Y_AXIS));
+        jpHotline.setOpaque(false);
 
-		profilePanel.add(Box.createVerticalStrut(10));
-		profilePanel.add(Box.createVerticalStrut(10));
-		profilePanel.add(userLabel);
-		profilePanel.add(userIDLabel);
-		profilePanel.add(Box.createVerticalStrut(10));
+        JLabel labHot1 = new JLabel("HOTLINE ATM");
+        labHot1.setFont(new Font("Arial", Font.PLAIN, 15));
+        labHot1.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
-		JPanel infoPanel = new JPanel();
-		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-		infoPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-		infoPanel.setBackground(Color.WHITE);
+        JLabel labHot2 = new JLabel("1900 1010 - 1010 1900");
+        labHot2.setFont(new Font("Arial", Font.PLAIN, 15));
+        labHot2.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
-		JLabel lblIdentity = new JLabel("Giấy tờ tùy thân");
-		lblIdentity.setFont(new Font("Arial", Font.LAYOUT_LEFT_TO_RIGHT, 20));
-		lblIdentity.setAlignmentX(Component.LEFT_ALIGNMENT);
+        jpHotline.add(labHot1);
+        jpHotline.add(labHot2);
+        topPanel.add(jpHotline);
 
-		JPanel lineIdentity = new JPanel();
-		lineIdentity.setPreferredSize(new Dimension(0, 1));
-		lineIdentity.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
-		lineIdentity.setBackground(Color.GRAY);
+        mainPanel.add(topPanel, BorderLayout.NORTH);
 
-		JLabel lblEmail = new JLabel("Email");
-		lblEmail.setFont(new Font("Arial", Font.LAYOUT_LEFT_TO_RIGHT, 20));
-		lblEmail.setAlignmentX(Component.LEFT_ALIGNMENT);
+        // Content panel
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.setOpaque(false);
+        contentPanel.setBorder(new EmptyBorder(20, 150, 20, 150));
 
-		JPanel lineEmail = new JPanel();
-		lineEmail.setPreferredSize(new Dimension(0, 1));
-		lineEmail.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
-		lineEmail.setBackground(Color.GRAY);
+        JLabel titleLabel = new JLabel("HỒ SƠ NGƯỜI DÙNG");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 25));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        contentPanel.add(titleLabel);
+        contentPanel.add(Box.createVerticalStrut(20));
 
-		JLabel lblChangePassword = new JLabel("Mã PIN");
-		lblChangePassword.setFont(new Font("Arial", Font.LAYOUT_LEFT_TO_RIGHT, 20));
-		lblChangePassword.setAlignmentX(Component.LEFT_ALIGNMENT);
+        JPanel profilePanel = new JPanel();
+        profilePanel.setLayout(new BoxLayout(profilePanel, BoxLayout.Y_AXIS));
+        profilePanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        profilePanel.setBackground(Color.WHITE);
+        profilePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		JPanel lineChangePassword = new JPanel();
-		lineChangePassword.setPreferredSize(new Dimension(0, 1));
-		lineChangePassword.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
-		lineChangePassword.setBackground(Color.GRAY);
+        userLabel = new JLabel("Tên người dùng");
+        userLabel.setFont(new Font("Arial", Font.BOLD, 25));
+        userLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		infoPanel.add(Box.createVerticalStrut(20));
-		infoPanel.add(lblIdentity);
-		infoPanel.add(lineIdentity);
-		infoPanel.add(Box.createVerticalStrut(20));
-		infoPanel.add(lblEmail);
-		infoPanel.add(lineEmail);
-		infoPanel.add(Box.createVerticalStrut(20));
-		infoPanel.add(lblChangePassword);
-		infoPanel.add(lineChangePassword);
+        userIDLabel = new JLabel("User ID");
+        userIDLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+        userIDLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		contentPanel.add(titleLabel);
-		contentPanel.add(Box.createVerticalStrut(20));
-		contentPanel.add(profilePanel);
-		contentPanel.add(Box.createVerticalStrut(20));
-		contentPanel.add(infoPanel);
+        profilePanel.add(Box.createVerticalStrut(15));
+        profilePanel.add(userLabel);
+        profilePanel.add(Box.createVerticalStrut(5));
+        profilePanel.add(userIDLabel);
+        profilePanel.add(Box.createVerticalStrut(15));
+        contentPanel.add(profilePanel);
+        contentPanel.add(Box.createVerticalStrut(20));
 
-		panel.add(contentPanel, BorderLayout.CENTER);
-	}
+        // Info section
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        infoPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        infoPanel.setBackground(Color.WHITE);
 
-//	public static void main(String[] args) {
-//		SwingUtilities.invokeLater(() -> {
-//			new ProfileForm().setVisible(true);
-//		});
-//	}
+        lblEmail = createInfoLabel("Email: ");
+        lblIdentity = createInfoLabel("SĐT: ");
+        lblChangePassword = createInfoLabel("Mã PIN: ");
+        lblBalance = createInfoLabel("Số dư: ");
+
+        infoPanel.add(lblEmail);
+        infoPanel.add(createSeparator());
+        infoPanel.add(lblIdentity);
+        infoPanel.add(createSeparator());
+        infoPanel.add(lblChangePassword);
+        infoPanel.add(createSeparator());
+        infoPanel.add(lblBalance);
+
+        contentPanel.add(infoPanel);
+        mainPanel.add(contentPanel, BorderLayout.CENTER);
+
+        // Button panel
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
+        buttonPanel.setOpaque(false);
+
+        exitButton = new JButton("Thoát");
+        logoutButton = new JButton("Đăng xuất");
+
+        Font btnFont = new Font("Arial", Font.BOLD, 18);
+        exitButton.setFont(btnFont);
+        logoutButton.setFont(btnFont);
+
+        exitButton.setBackground(Color.BLUE);
+        exitButton.setForeground(Color.WHITE);
+
+        logoutButton.setBackground(Color.BLUE);
+        logoutButton.setForeground(Color.WHITE);
+
+        buttonPanel.add(exitButton);
+        buttonPanel.add(logoutButton);
+
+        contentPanel.add(Box.createVerticalStrut(20));
+        contentPanel.add(buttonPanel);
+
+        exitButton.addActionListener(e -> this.dispose());
+
+        logoutButton.addActionListener(e -> {
+            this.dispose();
+            if (mainForm != null) {
+                mainForm.dispose();
+            }
+            
+            LoginForm loginForm = new LoginForm(context);
+            loginForm.setLocationRelativeTo(null);
+            loginForm.setVisible(true);
+        });
+    }
+
+    private JLabel createInfoLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Arial", Font.PLAIN, 20));
+        label.setBorder(new EmptyBorder(10, 10, 10, 10));
+        return label;
+    }
+
+    private Component createSeparator() {
+        JPanel line = new JPanel();
+        line.setPreferredSize(new Dimension(0, 1));
+        line.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
+        line.setBackground(Color.GRAY);
+        return line;
+    }
 }
