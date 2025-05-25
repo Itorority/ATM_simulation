@@ -13,17 +13,23 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import org.springframework.context.ApplicationContext;
 
+import group20.example.demo.model.AccountModel;
+import group20.example.demo.model.UserModel;
+
 public class WithDrawForm extends JFrame {
 	
 	private ApplicationContext context;
+	private UserModel currentUser;
+	private AccountModel currentAccount;
 
-	public WithDrawForm(ApplicationContext context) {
+	public WithDrawForm(ApplicationContext context, UserModel currentUser, AccountModel currentAccount) {
 		this.context = context;
+		this.currentUser = currentUser;
+		this.currentAccount = currentAccount;
 		initUI();
 
 	}
