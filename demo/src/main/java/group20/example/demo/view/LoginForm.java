@@ -24,6 +24,7 @@ import org.springframework.context.ApplicationContext;
 
 import group20.example.demo.controller.LoginController;
 import group20.example.demo.controller.UserController;
+import group20.example.demo.service.AccountService;
 import group20.example.demo.service.UserService;
 
 public class LoginForm extends JFrame {
@@ -35,8 +36,8 @@ public class LoginForm extends JFrame {
     private final UserController userController;
 
     public LoginForm(ApplicationContext context) {
-    	this.context = context;
-    	this.userController = context.getBean(UserController.class);
+        this.context = context;
+        this.userController = (context != null) ? context.getBean(UserController.class) : null;
         initUI();
     }
 
@@ -142,7 +143,10 @@ public class LoginForm extends JFrame {
     private void onLogin() {
         String card = usernameField.getText();
         String password = new String(passwordField.getPassword());
-        LoginController loginController = new LoginController(context.getBean(UserService.class));
+
+        UserService userService = context.getBean(UserService.class);
+        AccountService accountService = context.getBean(AccountService.class);
+        LoginController loginController = new LoginController(userService, accountService);
 
         try {
             loginController.login(card, password, context);

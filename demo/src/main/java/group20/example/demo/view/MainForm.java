@@ -8,30 +8,35 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import org.springframework.context.ApplicationContext;
+
+import group20.example.demo.model.AccountModel;
+import group20.example.demo.model.UserModel;
 
 public class MainForm extends JFrame {
 
     private static MainForm instance;
     private final ApplicationContext context;
 
-    public MainForm(ApplicationContext context) {
+    private UserModel currentUser;
+    private AccountModel currentAccount;
+    
+    public MainForm(ApplicationContext context, UserModel user, AccountModel account) {
     	
     	// Khao báo trường ApplicationContext
     	this.context = context;
-
+    	this.currentUser = user;
+    	this.currentAccount = account;
         initUI();
     }
 
-    public static MainForm getInstance(ApplicationContext context) {
+    public static MainForm getInstance(ApplicationContext context, UserModel user, AccountModel account) {
         if (instance == null) {
-            instance = new MainForm(context);
+            instance = new MainForm(context, user, account);
         }
         return instance;
     }
@@ -55,9 +60,31 @@ public class MainForm extends JFrame {
         jpTop.setOpaque(false);
         jpTop.setBorder(new EmptyBorder(20, 30, 20, 30));
 
+        JPanel logoPanel = new JPanel();
+        logoPanel.setLayout(new BoxLayout(logoPanel, BoxLayout.Y_AXIS));
+        logoPanel.setOpaque(false);
+
+        // Logo chính
         JLabel labLogo = new JLabel("ATM Simulator");
         labLogo.setFont(new Font("Arial", Font.BOLD, 25));
-        jpTop.add(labLogo, BorderLayout.WEST);
+
+        String usernameText = "Người dùng: " + (currentUser != null ? currentUser.getFullName() : "Chưa đăng nhập");
+        JLabel usernameLabel = new JLabel(usernameText);
+        usernameLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        usernameLabel.setForeground(Color.DARK_GRAY);
+
+        String balanceText = "Số dư: " + (currentAccount != null ? String.format("%,.0f VNĐ", currentAccount.getBalance()) : "0 VNĐ");
+        JLabel balanceLabel = new JLabel(balanceText);
+        balanceLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        balanceLabel.setForeground(Color.DARK_GRAY);
+
+        logoPanel.add(labLogo);
+        logoPanel.add(usernameLabel);
+        logoPanel.add(balanceLabel);
+
+
+        // Thêm vào top panel
+        jpTop.add(logoPanel, BorderLayout.WEST);
 
         JPanel jpHotline = new JPanel();
         jpHotline.setLayout(new BoxLayout(jpHotline, BoxLayout.Y_AXIS));
@@ -129,4 +156,9 @@ public class MainForm extends JFrame {
             form.setVisible(true);
         }); */
     }
+    //public static void main(String[] args) {
+    //    javax.swing.SwingUtilities.invokeLater(() -> {
+    //        new MainForm(null).setVisible(true);
+    //    });
+    //}
 }

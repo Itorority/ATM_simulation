@@ -3,6 +3,8 @@ package group20.example.demo.controller;
 import org.springframework.stereotype.Controller;
 
 import group20.example.demo.entity.User;
+import group20.example.demo.mapper.EntityModelMapper;
+import group20.example.demo.model.UserModel;
 import group20.example.demo.service.UserService;
 
 @Controller
@@ -13,15 +15,16 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
+    
     // Kiểm tra user có tồn tại hay không
     public boolean existsByEmailAndPassword(String email, String password) {
         return userService.existsByEmailAndPassword(email, password);
     }
 
     // tìm User 
-    public User findByEmailAndPassword(String email, String password) {
-        return userService.findByEmailAndPassword(email, password);
+    public UserModel findByEmailAndPassword(String email, String password) {
+        User userEntity = userService.findByEmailAndPassword(email, password);
+        return EntityModelMapper.toUserModel(userEntity);
     }
 
     // Cập nhật email

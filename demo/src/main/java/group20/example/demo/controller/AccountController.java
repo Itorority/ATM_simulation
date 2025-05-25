@@ -3,6 +3,8 @@ package group20.example.demo.controller;
 import org.springframework.stereotype.Controller;
 
 import group20.example.demo.entity.Account;
+import group20.example.demo.mapper.EntityModelMapper;
+import group20.example.demo.model.AccountModel;
 import group20.example.demo.service.AccountService;
 
 @Controller
@@ -13,15 +15,16 @@ public class AccountController {
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
     }
-
+    
     // Kiểm tra account có tồn tại hay không
     public boolean isAccountExist(Long userId) {
         return accountService.isAccountExist(userId);
     }
 
     // Dùng ID tìm account
-    public Account findAccountById(Long userId) {
-        return accountService.findAccountById(userId);
+    public AccountModel findAccountById(Long userId) {
+        Account accountEntity = accountService.findAccountById(userId);
+        return EntityModelMapper.toAccountModel(accountEntity);
     }
 
     // Cập nhật số dư account bằng UserID
