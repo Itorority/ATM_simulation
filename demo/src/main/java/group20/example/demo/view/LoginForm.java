@@ -29,18 +29,25 @@ import group20.example.demo.service.UserService;
 
 public class LoginForm extends JFrame {
 
+	// Các thành phần giao diện
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
+    
+    // Spring context và controller
     private final ApplicationContext context;
     private final UserController userController;
 
+    // nhận Spring context, dùng để lấy các Bean
     public LoginForm(ApplicationContext context) {
         this.context = context;
+        
+     // Nếu context không null thì lấy UserController từ Spring container
         this.userController = (context != null) ? context.getBean(UserController.class) : null;
         initUI();
     }
 
+    // Giao diện người dùng 
     private void initUI() {
         setTitle("ATM - Đăng nhập");
         setSize(800, 600);
@@ -53,6 +60,7 @@ public class LoginForm extends JFrame {
         mainPanel.setBackground(new Color(220, 220, 220));
         setContentPane(mainPanel);
 
+        // ===== Panel phía trên chứa logo và hotline =====
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
         topPanel.setOpaque(false);
@@ -62,7 +70,7 @@ public class LoginForm extends JFrame {
         labLogo.setFont(new Font("Arial", Font.BOLD, 25));
         topPanel.add(labLogo);
 
-        topPanel.add(Box.createHorizontalGlue());
+        topPanel.add(Box.createHorizontalGlue()); // Hotline được đính sang bên phải 
 
         JPanel jpHotline = new JPanel();
         jpHotline.setLayout(new BoxLayout(jpHotline, BoxLayout.Y_AXIS));
@@ -82,17 +90,18 @@ public class LoginForm extends JFrame {
 
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
+        // ===== Panel trung tâm chứa form đăng nhập =====
         JPanel panel = new JPanel();
         panel.setLayout(null);
         panel.setBackground(new Color(220, 220, 220));
         mainPanel.add(panel, BorderLayout.CENTER);
 
-        JLabel titleLabel = new JLabel("ĐĂNG NHẬP ATM");
+        JLabel titleLabel = new JLabel("ĐĂNG NHẬP ATM"); // tiêu đề
         titleLabel.setFont(new Font("Arial", Font.BOLD, 32));
         titleLabel.setBounds(270, 80, 300, 40);
         panel.add(titleLabel);
 
-        JLabel nameLabel = new JLabel("Tên tài khoản:");
+        JLabel nameLabel = new JLabel("Tên tài khoản:"); // Label + input tên user
         nameLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         nameLabel.setBounds(200, 180, 120, 30);
         panel.add(nameLabel);
@@ -101,7 +110,7 @@ public class LoginForm extends JFrame {
         usernameField.setBounds(330, 180, 200, 30);
         panel.add(usernameField);
 
-        JLabel passwordLabel = new JLabel("Mật khẩu:");
+        JLabel passwordLabel = new JLabel("Mật khẩu:"); // Label + input password
         passwordLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         passwordLabel.setBounds(200, 240, 120, 30);
         panel.add(passwordLabel);
@@ -110,12 +119,13 @@ public class LoginForm extends JFrame {
         passwordField.setBounds(330, 240, 200, 30);
         panel.add(passwordField);
 
-        JLabel forgotPasswordLabel = new JLabel("Quên mật khẩu?");
+        JLabel forgotPasswordLabel = new JLabel("Quên mật khẩu?"); // Label forgotPassword
         forgotPasswordLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         forgotPasswordLabel.setBounds(430, 285, 140, 25);
         forgotPasswordLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         panel.add(forgotPasswordLabel);
 
+        // sự kiện quên mật khẩu
         forgotPasswordLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 JOptionPane.showMessageDialog(panel, "Vui lòng liên hệ ngân hàng để lấy lại mật khẩu.");
@@ -130,6 +140,7 @@ public class LoginForm extends JFrame {
             }
         });
 
+        // Nút đăng nhập
         loginButton = new JButton("Đăng nhập");
         loginButton.setBounds(330, 330, 120, 40);
         loginButton.setFont(new Font("Arial", Font.BOLD, 15));
@@ -140,12 +151,14 @@ public class LoginForm extends JFrame {
         loginButton.addActionListener(e -> onLogin());
     }
 
+    // Hàm xủ lý sự kiện đăng nhập tích hợp data
     private void onLogin() {
         String card = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
         UserService userService = context.getBean(UserService.class);
         AccountService accountService = context.getBean(AccountService.class);
+        
         LoginController loginController = new LoginController(userService, accountService);
 
         try {
