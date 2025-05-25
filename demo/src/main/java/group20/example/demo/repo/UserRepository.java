@@ -29,6 +29,14 @@ public interface UserRepository extends JpaRepository<User, Integer> {
    * @return
    */
   public User findByEmailAndUserPassword(String email, String userPassword);
+  
+  /**
+   * Find user Id
+   * 
+   * @param userId
+   * @return
+   */
+  public User findById(int userId);
 
   /**
    * Update email by id
