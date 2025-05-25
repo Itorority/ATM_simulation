@@ -33,6 +33,17 @@ public class UserService {
   public User findByEmailAndPassword(String email, String password) {
     return userRepository.findByEmailAndUserPassword(email, password);
   }
+  
+  // Kiểm tra người dùng có tồn tại không dựa vào userId
+  /**
+   * 
+   * @param id
+   * @return
+   */
+  public User findById(int id) {
+	    return userRepository.findById(id);
+  }
+
 
   /**
    * Thay đổi email người dùng dựa vào ID
