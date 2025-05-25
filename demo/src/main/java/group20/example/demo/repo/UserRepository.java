@@ -36,6 +36,15 @@ public interface UserRepository extends JpaRepository<User, Integer> {
    * @param userId
    * @param email
    */
+  
+  public User findById(int userId);
+
+  /**
+   * Update email by id
+   * 
+   * @param userId
+   * @param email
+   */
   @Modifying // <-- Báo cho Spring Data JPA biết đây là một câu truy vấn CẬP NHẬT
   @Transactional // <-- Đảm bảo giao dịch được hoàn thành
   @Query("UPDATE User u SET u.email = :email WHERE u.id = :id")
