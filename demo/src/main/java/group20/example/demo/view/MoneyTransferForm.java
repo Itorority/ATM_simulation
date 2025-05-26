@@ -22,7 +22,7 @@ import org.springframework.context.ApplicationContext;
 import group20.example.demo.model.AccountModel;
 import group20.example.demo.model.UserModel;
 
-public class MoneyTransferForm extends JFrame {
+public class MoneyTransferForm extends JFrame implements IForm {
 	private final ApplicationContext context;
 	private UserModel currentUser;
 	private AccountModel currentAccount;
@@ -149,6 +149,12 @@ public class MoneyTransferForm extends JFrame {
 
 		contentPanel.setBorder(new EmptyBorder(50, 0, 0, 0));
 		panel.add(contentPanel, BorderLayout.CENTER);
+	}
+
+	@Override
+	public void showForm() {
+		// TODO Auto-generated method stub
+		this.setVisible(true);
 	}
 
 //	public static void main(String[] args) {
