@@ -92,6 +92,13 @@ public class WithDrawForm extends JFrame {
 		JButton btn1trieu = createButton("1.000.000 VND");
 		JButton btn2trieu = createButton("2.000.000 VND");
 		JButton btnCancel = createButton("Huỷ bỏ");
+		
+		addWithDrawAction(btn100k, 100000);
+		addWithDrawAction(btn200k, 200000);
+		addWithDrawAction(btn500k, 500000);
+		addWithDrawAction(btn1trieu, 1000000);
+		addWithDrawAction(btn2trieu, 2000000);
+		btnCancel.addActionListener(e -> onButtonCancel());
 
 		JPanel jpButtonLeft = new JPanel();
 		jpButtonLeft.setOpaque(false);
@@ -153,9 +160,20 @@ public class WithDrawForm extends JFrame {
 
 	}
 
-//	public static void main(String[] args) {
-//		 SwingUtilities.invokeLater(() -> {
-//	            new WithDrawForm().setVisible(true);
-//	        });
-//	}
+	private void addWithDrawAction(JButton button, double amount) {
+		button.addActionListener(e -> {
+			ConfirmWithDrawForm confirmForm = new ConfirmWithDrawForm(context, currentUser, currentAccount, amount);
+			confirmForm.setVisible(true);
+			confirmForm.setLocationRelativeTo(null);
+			dispose();
+		});
+	}
+	
+	private void onButtonCancel() {
+	    MainForm backToMainForm = new MainForm(context, currentUser, currentAccount);
+	    backToMainForm.setVisible(true);
+	    backToMainForm.setLocationRelativeTo(null);
+	    dispose();
+	}
+
 }
