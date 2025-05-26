@@ -164,6 +164,27 @@ public class MainForm extends JFrame {
             withDrawForm.setVisible(true);
             this.dispose();
         });
+        
+        napTienBtn.addActionListener(e -> {
+        	DepositForm depositForm = new DepositForm(context, currentUser, currentAccount);
+        	depositForm.setLocation(this.getLocation()); 
+        	depositForm.setVisible(true);
+            this.dispose();
+        });
+        
+        chuyenKhoanBtn.addActionListener(e -> {
+        	MoneyTransferForm moneyTransferForm = new MoneyTransferForm(context, currentUser, currentAccount);
+        	moneyTransferForm.setLocation(this.getLocation()); 
+        	moneyTransferForm.setVisible(true);
+            this.dispose();
+        });
+        
+        doiPinBtn.addActionListener(e -> {
+        	PINForm pinForm = new PINForm(context, currentUser, currentAccount);
+        	pinForm.setLocation(this.getLocation()); 
+        	pinForm.setVisible(true);
+            this.dispose();
+        });
 
     }
 
