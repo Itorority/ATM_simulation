@@ -1,7 +1,6 @@
 package group20.example.demo.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.context.ApplicationContext;
 
 import group20.example.demo.model.AccountModel;
 import group20.example.demo.model.UserModel;
@@ -9,15 +8,27 @@ import group20.example.demo.service.AccountService;
 
 @Controller
 public class PINController {
-	private AccountController accountController;
+	private ConfirmWithDrawController confirmWithDrawController;
 	private UserController userController;
+	private AccountController accountController;
+	private AccountService accountService;
 
-	public PINController(AccountController accountController, UserController userController) {
+	public PINController(ConfirmWithDrawController confirmWithDrawController, UserController userController,
+			AccountController accountController, AccountService accountService) {
 		super();
-		this.accountController = accountController;
+		this.confirmWithDrawController = confirmWithDrawController;
 		this.userController = userController;
+		this.accountController = accountController;
+		this.accountService = accountService;
 	}
 
+	public AccountModel verifyPIN(UserModel currentUser, AccountModel currentAccount, String inputPIN, double amount) {
+		if(!inputPIN.equals(currentAccount.getPinHash())) {
+			throw new IllegalArgumentException("Mã PIN không đúng. Vui lòng thử lại.");
+		}
+		return confirmWithDrawController.confirmWithDraw(currentUser, currentAccount, amount);
+	}
+	
 	public AccountModel changePIN(AccountModel currentAccount, String newPIN) {
 		accountController.changePIN(currentAccount.getUserId(), newPIN);
 		return accountController.findAccountById(currentAccount.getUserId());
