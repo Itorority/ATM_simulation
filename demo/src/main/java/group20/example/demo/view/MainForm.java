@@ -39,9 +39,6 @@ public class MainForm extends JFrame implements IForm {
     public static MainForm getInstance(ApplicationContext context, UserModel user, AccountModel account) {
         // get account from userID
 
-        if (instance == null) {
-            instance = new MainForm(context, user, account);
-        }
         return instance = new MainForm(context, user, account);
     }
 
