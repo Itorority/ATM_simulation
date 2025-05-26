@@ -20,7 +20,7 @@ import org.springframework.context.ApplicationContext;
 import group20.example.demo.model.AccountModel;
 import group20.example.demo.model.UserModel;
 
-public class WithDrawForm extends JFrame {
+public class WithDrawForm extends JFrame implements IForm {
 	
 	private ApplicationContext context;
 	private UserModel currentUser;
@@ -170,10 +170,16 @@ public class WithDrawForm extends JFrame {
 	}
 	
 	private void onButtonCancel() {
-	    MainForm backToMainForm = new MainForm(context, currentUser, currentAccount);
-	    backToMainForm.setVisible(true);
-	    backToMainForm.setLocationRelativeTo(null);
-	    dispose();
+        MainForm mainForm = MainForm.getInstance(context, currentUser, currentAccount);
+        mainForm.setLocationRelativeTo(null);
+        mainForm.setVisible(true);
+        dispose();
+	}
+
+	@Override
+	public void showForm() {
+		// TODO Auto-generated method stub
+		this.setVisible(true);
 	}
 
 }
