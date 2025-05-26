@@ -15,7 +15,7 @@ public class AccountController {
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
     }
-    
+
     // Kiểm tra account có tồn tại hay không
     public boolean isAccountExist(Long userId) {
         return accountService.isAccountExist(userId);
@@ -29,11 +29,12 @@ public class AccountController {
 
     // Cập nhật số dư account bằng UserID
     public void updateBalanceByUserId(Long userId, String pin, double balance) {
-        accountService.updateBalanceByUserId(userId, pin, balance);
+        accountService.withdrawMoney(userId, pin, balance);
     }
 
     // Cập nhật số dư Account bằng AccountNumber
     public void updateBalanceByAccountNumber(long userId, String pin, String accountNumber, double money) {
         accountService.updateBalanceByAccountNumber(userId, pin, accountNumber, money);
     }
+
 }

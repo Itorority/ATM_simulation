@@ -84,7 +84,7 @@ public class UserService {
    */
   public void withdrawMoney(Long id, String pin, double money) {
     try {
-      this.accountService.updateBalanceByUserId(id, pin, -1 * money);
+      this.accountService.withdrawMoney(id, pin, money);
     } catch (Exception e) {
       throw new IllegalArgumentException("Withdraw failed: " + e.getMessage());
     }
@@ -99,7 +99,7 @@ public class UserService {
    */
   public void depositMoney(Long id, String pin, double money) {
     try {
-      this.accountService.updateBalanceByUserId(id, pin, 1 * money);
+      this.accountService.depositMoney(id, pin, money);
     } catch (Exception e) {
       throw new IllegalArgumentException("Deposit failed: " + e.getMessage());
     }

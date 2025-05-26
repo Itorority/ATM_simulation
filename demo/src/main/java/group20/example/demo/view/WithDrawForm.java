@@ -93,11 +93,11 @@ public class WithDrawForm extends JFrame implements IForm {
 		JButton btn2trieu = createButton("2.000.000 VND");
 		JButton btnCancel = createButton("Huỷ bỏ");
 
-		addWithDrawAction(btn100k, 100);
-		addWithDrawAction(btn200k, 200);
-		addWithDrawAction(btn500k, 500);
-		addWithDrawAction(btn1trieu, 100);
-		addWithDrawAction(btn2trieu, 2000);
+		addWithDrawAction(btn100k, 100000);
+		addWithDrawAction(btn200k, 200000);
+		addWithDrawAction(btn500k, 500000);
+		addWithDrawAction(btn1trieu, 1000000);
+		addWithDrawAction(btn2trieu, 2000000);
 		btnCancel.addActionListener(e -> onButtonCancel());
 
 		JPanel jpButtonLeft = new JPanel();
