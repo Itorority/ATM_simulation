@@ -19,6 +19,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import org.springframework.context.ApplicationContext;
+import group20.example.demo.model.AccountModel;
+import group20.example.demo.model.UserModel;
 
 public class MoneyTransferForm extends JFrame {
 	private final ApplicationContext context;
