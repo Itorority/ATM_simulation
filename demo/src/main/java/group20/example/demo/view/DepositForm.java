@@ -22,9 +22,13 @@ import org.springframework.context.ApplicationContext;
 public class DepositForm extends JFrame {
 	private JTextField moneyField;
 	private final ApplicationContext context;
+	private UserModel currentUser;
+	private AccountModel currentAccount;
 
-	public DepositForm(ApplicationContext context) {
+	public DepositForm(ApplicationContext context, UserModel currentUser, AccountModel currentAccount) {
 		this.context = context;
+		this.currentUser = currentUser;
+		this.currentAccount = currentAccount;
 		initUI();
 	}
 
