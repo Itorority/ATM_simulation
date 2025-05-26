@@ -2,13 +2,14 @@ package group20.example.demo.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
+import java.math.BigDecimal;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -16,28 +17,33 @@ import javax.swing.border.EmptyBorder;
 
 import org.springframework.context.ApplicationContext;
 
+import group20.example.demo.model.AccountModel;
+import group20.example.demo.model.UserModel;
+
 public class MainForm extends JFrame {
 
     private static MainForm instance;
     private final ApplicationContext context;
 
-    public MainForm(ApplicationContext context) {
-    	
-    	// Khao báo trường ApplicationContext
-    	this.context = context;
+    private UserModel currentUser;
+    private AccountModel currentAccount;
 
+    public MainForm(ApplicationContext context, UserModel user, AccountModel account) {
+        this.context = context;
+        this.currentUser = user;
+        this.currentAccount = account;
         initUI();
     }
 
-    public static MainForm getInstance(ApplicationContext context) {
+    public static MainForm getInstance(ApplicationContext context, UserModel user, AccountModel account) {
         if (instance == null) {
-            instance = new MainForm(context);
+            instance = new MainForm(context, user, account);
         }
         return instance;
     }
-    
+
     public ApplicationContext getApplicationContext() {
-    	return context;
+        return context;
     }
 
     private void initUI() {
@@ -46,7 +52,7 @@ public class MainForm extends JFrame {
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
-        
+
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(new Color(220, 220, 220));
         setContentPane(panel);
@@ -55,9 +61,52 @@ public class MainForm extends JFrame {
         jpTop.setOpaque(false);
         jpTop.setBorder(new EmptyBorder(20, 30, 20, 30));
 
+        JPanel logoPanel = new JPanel();
+        logoPanel.setLayout(new BoxLayout(logoPanel, BoxLayout.Y_AXIS));
+        logoPanel.setOpaque(false);
+
         JLabel labLogo = new JLabel("ATM Simulator");
         labLogo.setFont(new Font("Arial", Font.BOLD, 25));
-        jpTop.add(labLogo, BorderLayout.WEST);
+
+        String usernameText = "Người dùng: " + (currentUser != null ? currentUser.getFullName() : "Chưa đăng nhập");
+        JLabel usernameLabel = new JLabel(usernameText);
+        usernameLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        usernameLabel.setForeground(Color.DARK_GRAY);
+
+        String balanceText = "Số dư: " + (currentAccount != null ? String.format("%,.0f VNĐ", currentAccount.getBalance()) : "0 VNĐ");
+        JLabel balanceLabel = new JLabel(balanceText);
+        balanceLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        balanceLabel.setForeground(Color.DARK_GRAY);
+
+        logoPanel.add(labLogo);
+        logoPanel.add(usernameLabel);
+        logoPanel.add(balanceLabel);
+
+        JButton profileButton = new JButton("Hồ sơ");
+        profileButton.setFont(new Font("Arial", Font.BOLD, 18));
+        profileButton.setBackground(new Color(30, 144, 255));
+        profileButton.setForeground(Color.WHITE);
+       
+
+        profileButton.addActionListener(e -> {
+            ProfileForm profileForm;
+            if (context != null) {
+                profileForm = new ProfileForm(context, getInstance(context, currentUser, currentAccount), currentUser, currentAccount);
+            } else {
+                profileForm = new ProfileForm(context, this, currentUser, currentAccount);
+            }
+            profileForm.setUserInfo(currentUser, currentAccount);
+            profileForm.setLocation(this.getLocation());  // or use this.getLocation() if you want
+            profileForm.setVisible(true);
+        });
+
+        JPanel profilePanel = new JPanel();
+        profilePanel.setOpaque(false);
+        profilePanel.add(profileButton);
+
+        jpTop.add(profilePanel, BorderLayout.CENTER); // hoặc EAST nếu muốn
+        logoPanel.add(profileButton);
+        jpTop.add(logoPanel, BorderLayout.WEST);
 
         JPanel jpHotline = new JPanel();
         jpHotline.setLayout(new BoxLayout(jpHotline, BoxLayout.Y_AXIS));
@@ -65,15 +114,18 @@ public class MainForm extends JFrame {
 
         JLabel labHot1 = new JLabel("HOTLINE ATM");
         labHot1.setFont(new Font("Arial", Font.PLAIN, 15));
+        labHot1.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        
         JLabel labHot2 = new JLabel("1900 1010 - 1010 1900");
         labHot2.setFont(new Font("Arial", Font.PLAIN, 15));
+        labHot2.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        
         jpHotline.add(labHot1);
         jpHotline.add(labHot2);
 
         jpTop.add(jpHotline, BorderLayout.EAST);
         panel.add(jpTop, BorderLayout.NORTH);
 
-        // Content Panel
         JPanel contentPanel = new JPanel(null);
         contentPanel.setOpaque(false);
         panel.add(contentPanel, BorderLayout.CENTER);
@@ -90,7 +142,6 @@ public class MainForm extends JFrame {
         instructionLabel.setBounds(270, 120, 300, 30);
         contentPanel.add(instructionLabel);
 
-        // Button
         JButton rutTienBtn = new JButton("Rút tiền");
         rutTienBtn.setBounds(150, 200, 200, 50);
         JButton chuyenKhoanBtn = new JButton("Chuyển khoản");
@@ -107,26 +158,29 @@ public class MainForm extends JFrame {
             contentPanel.add(btn);
         }
 
-        // Events
-        /* rutTienBtn.addActionListener(e -> {
-            WithDrawForm form = context.getBean(WithDrawForm.class);
-            form.setLocationRelativeTo(null);
-            form.setVisible(true);
+        rutTienBtn.addActionListener(e -> {
+        	WithDrawForm withDrawForm = new WithDrawForm(context, currentUser, currentAccount);
+            withDrawForm.setLocation(this.getLocation()); 
+            withDrawForm.setVisible(true);
+            this.dispose();
         });
-        chuyenKhoanBtn.addActionListener(e -> {
-                    WithDrawForm form = context.getBean(WithDrawForm.class);
-                    form.setLocationRelativeTo(null);
-                    form.setVisible(true);
-                });
-        napTienBtn.addActionListener(e -> {
-            WithDrawForm form = context.getBean(WithDrawForm.class);
-            form.setLocationRelativeTo(null);
-            form.setVisible(true);
+
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            UserModel mockUser = new UserModel();
+            mockUser.setFullName("Nguyễn Văn A");
+            //mockUser.setUserId("user123");
+            mockUser.setEmail("nguyenvana@email.com");
+            mockUser.setPhoneNumber("0909123456");
+
+            AccountModel mockAccount = new AccountModel();
+            mockAccount.setBalance(new BigDecimal("10000000")); // 10 triệu
+            mockAccount.setPinHash("1234");
+
+            MainForm mainForm = new MainForm(null, mockUser, mockAccount);
+            mainForm.setVisible(true);
         });
-        doiPinBtn.addActionListener(e -> {
-            WithDrawForm form = context.getBean(WithDrawForm.class);
-            form.setLocationRelativeTo(null);
-            form.setVisible(true);
-        }); */
     }
 }
