@@ -137,10 +137,10 @@ public class ConfirmWithDrawForm extends JFrame {
 			
 			JOptionPane.showMessageDialog(this, "Rút tiền thành công!");
 			
-			MainForm mainForm = new MainForm(context, currentUser, currentAccount);
-			mainForm.setVisible(true);
-			mainForm.setLocationRelativeTo(null);
-			dispose();
+		        MainForm mainForm = MainForm.getInstance(context, currentUser, currentAccount);
+		        mainForm.setLocationRelativeTo(null);
+		        mainForm.setVisible(true);
+		        dispose();
 
 		} catch (IllegalArgumentException ex) {
 			JOptionPane.showMessageDialog(this, ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
