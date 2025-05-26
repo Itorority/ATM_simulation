@@ -18,13 +18,19 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import org.springframework.context.ApplicationContext;
+import group20.example.demo.model.AccountModel;
+import group20.example.demo.model.UserModel;
 
-public class DepositForm extends JFrame {
+public class DepositForm extends JFrame implements IForm {
 	private JTextField moneyField;
 	private final ApplicationContext context;
+	private UserModel currentUser;
+	private AccountModel currentAccount;
 
-	public DepositForm(ApplicationContext context) {
+	public DepositForm(ApplicationContext context, UserModel currentUser, AccountModel currentAccount) {
 		this.context = context;
+		this.currentUser = currentUser;
+		this.currentAccount = currentAccount;
 		initUI();
 	}
 
@@ -110,6 +116,12 @@ public class DepositForm extends JFrame {
 
 		contentPanel.setBorder(new EmptyBorder(50, 0, 0, 0));
 		panel.add(contentPanel, BorderLayout.CENTER);
+	}
+
+	@Override
+	public void showForm() {
+		// TODO Auto-generated method stub
+		this.setVisible(true);
 	}
 
 //	public static void main(String[] args) {

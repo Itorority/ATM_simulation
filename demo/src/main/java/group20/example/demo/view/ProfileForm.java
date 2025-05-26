@@ -13,7 +13,7 @@ import group20.example.demo.model.AccountModel;
 import group20.example.demo.model.UserModel;
 
 
-public class ProfileForm extends JFrame {
+public class ProfileForm extends JFrame implements IForm {
     private ApplicationContext context;
     private MainForm mainForm;
 
@@ -171,7 +171,12 @@ public class ProfileForm extends JFrame {
         contentPanel.add(Box.createVerticalStrut(20));
         contentPanel.add(buttonPanel);
 
-        exitButton.addActionListener(e -> this.dispose());
+        exitButton.addActionListener(e -> {
+            this.dispose();        
+            if (mainForm != null) {
+                mainForm.showForm();
+            }
+        });
 
         logoutButton.addActionListener(e -> {
             this.dispose();
@@ -199,4 +204,10 @@ public class ProfileForm extends JFrame {
         line.setBackground(Color.GRAY);
         return line;
     }
+
+	@Override
+	public void showForm() {
+		// TODO Auto-generated method stub
+		this.setVisible(true);
+	}
 }

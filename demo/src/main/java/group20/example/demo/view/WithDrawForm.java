@@ -20,8 +20,8 @@ import org.springframework.context.ApplicationContext;
 import group20.example.demo.model.AccountModel;
 import group20.example.demo.model.UserModel;
 
-public class WithDrawForm extends JFrame {
-	
+public class WithDrawForm extends JFrame implements IForm {
+
 	private ApplicationContext context;
 	private UserModel currentUser;
 	private AccountModel currentAccount;
@@ -40,7 +40,7 @@ public class WithDrawForm extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setResizable(false);
-		
+
 		// main panel
 		JPanel jpMain = new JPanel(new BorderLayout());
 		jpMain.setBackground(new Color(220, 220, 220));
@@ -92,6 +92,13 @@ public class WithDrawForm extends JFrame {
 		JButton btn1trieu = createButton("1.000.000 VND");
 		JButton btn2trieu = createButton("2.000.000 VND");
 		JButton btnCancel = createButton("Huỷ bỏ");
+
+		addWithDrawAction(btn100k, 100);
+		addWithDrawAction(btn200k, 200);
+		addWithDrawAction(btn500k, 500);
+		addWithDrawAction(btn1trieu, 100);
+		addWithDrawAction(btn2trieu, 2000);
+		btnCancel.addActionListener(e -> onButtonCancel());
 
 		JPanel jpButtonLeft = new JPanel();
 		jpButtonLeft.setOpaque(false);
@@ -153,9 +160,26 @@ public class WithDrawForm extends JFrame {
 
 	}
 
-//	public static void main(String[] args) {
-//		 SwingUtilities.invokeLater(() -> {
-//	            new WithDrawForm().setVisible(true);
-//	        });
-//	}
+	private void addWithDrawAction(JButton button, double amount) {
+		button.addActionListener(e -> {
+			ConfirmWithDrawForm confirmForm = new ConfirmWithDrawForm(context, currentUser, currentAccount, amount);
+			confirmForm.setVisible(true);
+			confirmForm.setLocationRelativeTo(null);
+			dispose();
+		});
+	}
+
+	private void onButtonCancel() {
+		MainForm mainForm = MainForm.getInstance(context, currentUser, currentAccount);
+		mainForm.setLocationRelativeTo(null);
+		mainForm.setVisible(true);
+		dispose();
+	}
+
+	@Override
+	public void showForm() {
+		// TODO Auto-generated method stub
+		this.setVisible(true);
+	}
+
 }

@@ -54,7 +54,7 @@ public class AccountService {
    */
   public void updateBalanceByUserId(Long userId, String pin, double balance) {
     // check the input balance from user is correct
-    if (balance <= 0) {
+    if ((balance * -1) <= 0) {
       throw new IllegalArgumentException("Balance is invalid for transaction!!! ");
     }
 

@@ -74,7 +74,7 @@ select * from users ;
 -- create transactions tables
 create table transactions (
     transaction_id  int IDENTITY(1,1)  ,
-    account_number varchar(20) UNIQUE ,
+    account_number varchar(20)  ,
     transaction_type VARCHAR(10) CHECK (transaction_type IN ('withdraw', 'deposit', 'transfer')),
     date_create datetime ,
     description nvarchar(max)

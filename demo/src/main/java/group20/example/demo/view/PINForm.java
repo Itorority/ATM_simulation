@@ -19,13 +19,19 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import org.springframework.context.ApplicationContext;
+import group20.example.demo.model.AccountModel;
+import group20.example.demo.model.UserModel;
 
-public class PINForm extends JFrame {
+public class PINForm extends JFrame implements IForm {
 	
 	private ApplicationContext context;
+	private UserModel currentUser;
+	private AccountModel currentAccount;
 	
-	public PINForm(ApplicationContext context) {
+	public PINForm(ApplicationContext context, UserModel currentUser, AccountModel currentAccount) {
 		this.context = context;
+		this.currentUser = currentUser;
+		this.currentAccount = currentAccount;
 		initUI();
 
 
@@ -141,6 +147,12 @@ public class PINForm extends JFrame {
 		btn.setPreferredSize(btnSize);
 		btn.setMinimumSize(btnSize);
 		return btn;
+	}
+
+	@Override
+	public void showForm() {
+		// TODO Auto-generated method stub
+		this.setVisible(true);
 	}
 
 //	public static void main(String[] args) {

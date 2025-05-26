@@ -19,13 +19,20 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import org.springframework.context.ApplicationContext;
+import group20.example.demo.model.AccountModel;
+import group20.example.demo.model.UserModel;
 
-public class MoneyTransferForm extends JFrame {
+public class MoneyTransferForm extends JFrame implements IForm {
 	private final ApplicationContext context;
+	private UserModel currentUser;
+	private AccountModel currentAccount;
 
-	public MoneyTransferForm(ApplicationContext context) {
+	public MoneyTransferForm(ApplicationContext context, UserModel currentUser, AccountModel currentAccount) {
 		this.context = context;
+		this.currentUser = currentUser;
+		this.currentAccount = currentAccount;
 		initUI();
+		
 	}
 
 	private void initUI() {
@@ -142,6 +149,12 @@ public class MoneyTransferForm extends JFrame {
 
 		contentPanel.setBorder(new EmptyBorder(50, 0, 0, 0));
 		panel.add(contentPanel, BorderLayout.CENTER);
+	}
+
+	@Override
+	public void showForm() {
+		// TODO Auto-generated method stub
+		this.setVisible(true);
 	}
 
 //	public static void main(String[] args) {
