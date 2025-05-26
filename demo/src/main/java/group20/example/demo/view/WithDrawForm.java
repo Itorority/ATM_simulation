@@ -96,7 +96,7 @@ public class WithDrawForm extends JFrame implements IForm {
 		addWithDrawAction(btn100k, 100000);
 		addWithDrawAction(btn200k, 200000);
 		addWithDrawAction(btn500k, 500000);
-		addWithDrawAction(btn1trieu, 100000);
+		addWithDrawAction(btn1trieu, 1000000);
 		addWithDrawAction(btn2trieu, 2000000);
 		btnCancel.addActionListener(e -> onButtonCancel());
 
