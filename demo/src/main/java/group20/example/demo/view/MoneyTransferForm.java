@@ -22,10 +22,15 @@ import org.springframework.context.ApplicationContext;
 
 public class MoneyTransferForm extends JFrame {
 	private final ApplicationContext context;
+	private UserModel currentUser;
+	private AccountModel currentAccount;
 
-	public MoneyTransferForm(ApplicationContext context) {
+	public MoneyTransferForm(ApplicationContext context, UserModel currentUser, AccountModel currentAccount) {
 		this.context = context;
+		this.currentUser = currentUser;
+		this.currentAccount = currentAccount;
 		initUI();
+		
 	}
 
 	private void initUI() {
