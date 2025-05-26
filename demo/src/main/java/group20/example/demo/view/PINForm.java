@@ -8,7 +8,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.HeadlessException;
 
-import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -18,14 +17,15 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import org.springframework.context.ApplicationContext;
 
+import group20.example.demo.controller.AccountController;
 import group20.example.demo.controller.PINController;
 import group20.example.demo.model.AccountModel;
 import group20.example.demo.model.UserModel;
+import group20.example.demo.service.AccountService;
 
 public class PINForm extends JFrame implements IForm {
 
@@ -174,8 +174,10 @@ public class PINForm extends JFrame implements IForm {
 			currentAccount = pinController.verifyPIN(currentUser, currentAccount, inputPIN, amount);
 
 			JOptionPane.showMessageDialog(this, "Rút tiền thành công!");
-
-			MainForm mainForm = MainForm.getInstance(context, currentUser, currentAccount);
+			AccountService accountService = context.getBean(AccountService.class);
+			AccountController accountController = new AccountController(accountService);
+			AccountModel updatedAccount = accountController.findAccountById(currentUser.getUserId());
+			MainForm mainForm = MainForm.getInstance(context, currentUser, updatedAccount);
 			mainForm.setVisible(true);
 			mainForm.setLocationRelativeTo(null);
 			dispose();
@@ -198,9 +200,9 @@ public class PINForm extends JFrame implements IForm {
 		this.setVisible(true);
 	}
 
-//	public static void main(String[] args) {
-//		 SwingUtilities.invokeLater(() -> {
-//	            new PINForm().setVisible(true);
-//	        });
-//	}
+	// public static void main(String[] args) {
+	// SwingUtilities.invokeLater(() -> {
+	// new PINForm().setVisible(true);
+	// });
+	// }
 }

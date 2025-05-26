@@ -211,6 +211,7 @@ public class MoneyTransferForm extends JFrame implements IForm {
 
 		AccountService accountService = context.getBean(AccountService.class);
 		AccountController accountController = new AccountController(accountService);
+
 		try {
 			userController.transferMoney(id, pin, accountNumber, amount);
 			dispose();
@@ -218,7 +219,7 @@ public class MoneyTransferForm extends JFrame implements IForm {
 
 			// Cập nhật lại thông tin tài khoản
 			AccountModel updatedAccount = accountController.findAccountById(id);
-			System.out.println("Updated Account: " + updatedAccount.getBalance());
+
 			MainForm mainForm = MainForm.getInstance(context, currentUser, updatedAccount);
 			mainForm.setVisible(true);
 			mainForm.setLocationRelativeTo(null);
