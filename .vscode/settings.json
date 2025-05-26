@@ -1,3 +1,4 @@
 {
-  "java.configuration.updateBuildConfiguration": "automatic"
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.jdt.ls.vmargs": "-Djava.awt.headless=false" // Optional (for JDT tools)
 }
