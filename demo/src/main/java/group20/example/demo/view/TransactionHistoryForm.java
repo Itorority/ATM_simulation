@@ -5,32 +5,28 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.HeadlessException;
 import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import org.springframework.context.ApplicationContext;
 
-import group20.example.demo.controller.UserController;
 import group20.example.demo.entity.Transaction;
 
 public class TransactionHistoryForm extends JFrame {
 	private List<Transaction> HistoryList;
-	 private final ApplicationContext context;
+	private final ApplicationContext context;
 
 	public TransactionHistoryForm(ApplicationContext context) {
-        this.context = context;
-        initUI();
-    }
+		this.context = context;
+		initUI();
+	}
 
 	private void initUI() {
 		setTitle("ATM - Out of Service");
@@ -96,9 +92,9 @@ public class TransactionHistoryForm extends JFrame {
 		panel.add(contentPanel, BorderLayout.CENTER);
 	}
 
-//	public static void main(String[] args) {
-//		SwingUtilities.invokeLater(() -> {
-//			new TransactionHistoryForm().setVisible(true);
-//		});
-//	}
+	// public static void main(String[] args) {
+	// SwingUtilities.invokeLater(() -> {
+	// new TransactionHistoryForm().setVisible(true);
+	// });
+	// }
 }

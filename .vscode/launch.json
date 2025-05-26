@@ -3,10 +3,17 @@
   "configurations": [
     {
       "type": "java",
+      "name": "MainForm",
+      "request": "launch",
+      "mainClass": "group20.example.demo.view.MainForm",
+      "projectName": "demo"
+    },
+    {
+      "type": "java",
       "name": "Launch Application",
       "request": "launch",
       "mainClass": "group20.example.demo.AtmSimulationApplication",
-      "vmArgs": "-Djava.awt.headless=false" // <-- Add this line
+      "vmArgs": "-Djava.awt.headless=false"
     }
   ]
 }

@@ -21,7 +21,7 @@ import group20.example.demo.model.AccountModel;
 import group20.example.demo.model.UserModel;
 
 public class WithDrawForm extends JFrame implements IForm {
-	
+
 	private ApplicationContext context;
 	private UserModel currentUser;
 	private AccountModel currentAccount;
@@ -40,7 +40,7 @@ public class WithDrawForm extends JFrame implements IForm {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setResizable(false);
-		
+
 		// main panel
 		JPanel jpMain = new JPanel(new BorderLayout());
 		jpMain.setBackground(new Color(220, 220, 220));
@@ -92,12 +92,12 @@ public class WithDrawForm extends JFrame implements IForm {
 		JButton btn1trieu = createButton("1.000.000 VND");
 		JButton btn2trieu = createButton("2.000.000 VND");
 		JButton btnCancel = createButton("Huỷ bỏ");
-		
-		addWithDrawAction(btn100k, 100000);
-		addWithDrawAction(btn200k, 200000);
-		addWithDrawAction(btn500k, 500000);
-		addWithDrawAction(btn1trieu, 1000000);
-		addWithDrawAction(btn2trieu, 2000000);
+
+		addWithDrawAction(btn100k, 100);
+		addWithDrawAction(btn200k, 200);
+		addWithDrawAction(btn500k, 500);
+		addWithDrawAction(btn1trieu, 100);
+		addWithDrawAction(btn2trieu, 2000);
 		btnCancel.addActionListener(e -> onButtonCancel());
 
 		JPanel jpButtonLeft = new JPanel();
@@ -168,12 +168,12 @@ public class WithDrawForm extends JFrame implements IForm {
 			dispose();
 		});
 	}
-	
+
 	private void onButtonCancel() {
-        MainForm mainForm = MainForm.getInstance(context, currentUser, currentAccount);
-        mainForm.setLocationRelativeTo(null);
-        mainForm.setVisible(true);
-        dispose();
+		MainForm mainForm = MainForm.getInstance(context, currentUser, currentAccount);
+		mainForm.setLocationRelativeTo(null);
+		mainForm.setVisible(true);
+		dispose();
 	}
 
 	@Override

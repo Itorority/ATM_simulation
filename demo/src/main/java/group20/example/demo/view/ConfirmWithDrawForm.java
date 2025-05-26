@@ -18,9 +18,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.springframework.context.ApplicationContext;
 
-import group20.example.demo.controller.AccountController;
 import group20.example.demo.controller.ConfirmWithDrawController;
-import group20.example.demo.controller.UserController;
 import group20.example.demo.model.AccountModel;
 import group20.example.demo.model.UserModel;
 
@@ -101,14 +99,14 @@ public class ConfirmWithDrawForm extends JFrame {
 
 		JButton btnConfirm = createButton("Xác nhận");
 		JButton btnCancel = createButton("Huỷ bỏ");
-		
+
 		btnConfirm.addActionListener(e -> onButtonConfirm());
 		btnCancel.addActionListener(e -> onButtonCancel());
 
 		jpBottom.add(btnConfirm);
 		jpBottom.add(Box.createHorizontalStrut(30));
 		jpBottom.add(btnCancel);
-		
+
 		jpMain.add(jpTop, BorderLayout.NORTH);
 		jpMain.add(jpCenter, BorderLayout.CENTER);
 		jpMain.add(jpBottom, BorderLayout.SOUTH);
@@ -129,12 +127,12 @@ public class ConfirmWithDrawForm extends JFrame {
 
 	private void onButtonConfirm() {
 		ConfirmWithDrawController confirmWithDrawController = context.getBean(ConfirmWithDrawController.class);
-			
+
 		try {
 			currentAccount = confirmWithDrawController.confirmWithDraw(currentUser, currentAccount, amount);
-			
+
 			JOptionPane.showMessageDialog(this, "Rút tiền thành công!");
-			
+
 			MainForm mainForm = MainForm.getInstance(context, currentUser, currentAccount);
 			mainForm.setVisible(true);
 			mainForm.setLocationRelativeTo(null);
@@ -153,4 +151,3 @@ public class ConfirmWithDrawForm extends JFrame {
 
 	}
 }
-

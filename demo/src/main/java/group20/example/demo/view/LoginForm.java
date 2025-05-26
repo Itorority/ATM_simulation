@@ -27,29 +27,29 @@ import group20.example.demo.service.UserService;
 
 public class LoginForm extends JFrame {
 
-	// Các thành phần giao diện
+    // Các thành phần giao diện
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
-    
+
     // Spring context và controller
     private final ApplicationContext context;
 
     // nhận Spring context, dùng để lấy các Bean
     public LoginForm(ApplicationContext context) {
         this.context = context;
-        
+
         initUI();
     }
 
-    // Giao diện người dùng 
+    // Giao diện người dùng
     private void initUI() {
         setTitle("ATM - Đăng nhập");
         setSize(800, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
-        
+
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.setBackground(new Color(220, 220, 220));
@@ -65,7 +65,7 @@ public class LoginForm extends JFrame {
         labLogo.setFont(new Font("Arial", Font.BOLD, 25));
         topPanel.add(labLogo);
 
-        topPanel.add(Box.createHorizontalGlue()); // Hotline được đính sang bên phải 
+        topPanel.add(Box.createHorizontalGlue()); // Hotline được đính sang bên phải
 
         JPanel jpHotline = new JPanel();
         jpHotline.setLayout(new BoxLayout(jpHotline, BoxLayout.Y_AXIS));
@@ -153,7 +153,7 @@ public class LoginForm extends JFrame {
 
         UserService userService = context.getBean(UserService.class);
         AccountService accountService = context.getBean(AccountService.class);
-        
+
         LoginController loginController = new LoginController(userService, accountService);
 
         try {
