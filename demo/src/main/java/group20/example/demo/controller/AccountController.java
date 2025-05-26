@@ -9,7 +9,6 @@ import group20.example.demo.service.AccountService;
 
 @Controller
 public class AccountController {
-
 	private AccountService accountService;
 
 	public AccountController(AccountService accountService) {

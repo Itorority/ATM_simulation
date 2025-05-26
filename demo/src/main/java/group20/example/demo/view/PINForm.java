@@ -6,35 +6,49 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.HeadlessException;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import org.springframework.context.ApplicationContext;
+
+import group20.example.demo.controller.PINController;
 import group20.example.demo.model.AccountModel;
 import group20.example.demo.model.UserModel;
 
 public class PINForm extends JFrame implements IForm {
-	
+
+	private JTextField textPIN;
 	private ApplicationContext context;
 	private UserModel currentUser;
 	private AccountModel currentAccount;
-	
+	private double amount;
+
+	public PINForm(ApplicationContext context, UserModel currentUser, AccountModel currentAccount, double amount)
+			throws HeadlessException {
+		super();
+		this.context = context;
+		this.currentUser = currentUser;
+		this.currentAccount = currentAccount;
+		this.amount = amount;
+		initUI();
+	}
+
 	public PINForm(ApplicationContext context, UserModel currentUser, AccountModel currentAccount) {
 		this.context = context;
 		this.currentUser = currentUser;
 		this.currentAccount = currentAccount;
-		initUI();
-
-
 	}
 
 	private void initUI() {
@@ -43,7 +57,7 @@ public class PINForm extends JFrame implements IForm {
 		setLocationRelativeTo(null);
 		setSize(800, 600);
 		setResizable(false);
-		
+
 		// Main panel
 		JPanel jpMain = new JPanel(new BorderLayout());
 		jpMain.setBackground(new Color(220, 220, 220));
@@ -94,7 +108,7 @@ public class PINForm extends JFrame implements IForm {
 		labContent2.setAlignmentX(CENTER_ALIGNMENT);
 
 		// field de nhap ma PIN
-		JTextField textPIN = new JTextField(6);
+		textPIN = new JTextField(6);
 		textPIN.setMaximumSize(new Dimension(450, 50));
 		textPIN.setPreferredSize(new Dimension(450, 50));
 		textPIN.setMinimumSize(new Dimension(450, 50));
@@ -124,6 +138,9 @@ public class PINForm extends JFrame implements IForm {
 		JButton btnContinue = createButton("Tiếp tục");
 		JButton btnCancel = createButton("Huỷ bỏ");
 
+		btnContinue.addActionListener(e -> onButtonContinue());
+		btnCancel.addActionListener(e -> onButtonCancel());
+
 		jpBtn.add(btnContinue);
 		jpBtn.add(Box.createRigidArea(new Dimension(0, 10)));
 		jpBtn.add(btnCancel);
@@ -147,6 +164,32 @@ public class PINForm extends JFrame implements IForm {
 		btn.setPreferredSize(btnSize);
 		btn.setMinimumSize(btnSize);
 		return btn;
+	}
+
+	private void onButtonContinue() {
+		String inputPIN = textPIN.getText();
+		PINController pinController = context.getBean(PINController.class);
+
+		try {
+			currentAccount = pinController.verifyPIN(currentUser, currentAccount, inputPIN, amount);
+
+			JOptionPane.showMessageDialog(this, "Rút tiền thành công!");
+
+			MainForm mainForm = MainForm.getInstance(context, currentUser, currentAccount);
+			mainForm.setVisible(true);
+			mainForm.setLocationRelativeTo(null);
+			dispose();
+
+		} catch (IllegalArgumentException ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	private void onButtonCancel() {
+		WithDrawForm backToWithDraw = new WithDrawForm(context, currentUser, currentAccount);
+		backToWithDraw.setVisible(true);
+		backToWithDraw.setLocationRelativeTo(null);
+		dispose();
 	}
 
 	@Override

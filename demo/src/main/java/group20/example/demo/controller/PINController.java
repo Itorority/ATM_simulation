@@ -1,3 +1,4 @@
+
 package group20.example.demo.controller;
 
 import org.springframework.stereotype.Controller;
