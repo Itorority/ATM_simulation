@@ -126,22 +126,11 @@ public class ConfirmWithDrawForm extends JFrame {
 	}
 
 	private void onButtonConfirm() {
-		ConfirmWithDrawController confirmWithDrawController = context.getBean(ConfirmWithDrawController.class);
-
-		try {
-			currentAccount = confirmWithDrawController.confirmWithDraw(currentUser, currentAccount, amount);
-
-			JOptionPane.showMessageDialog(this, "Rút tiền thành công!");
-
-			MainForm mainForm = MainForm.getInstance(context, currentUser, currentAccount);
-			mainForm.setVisible(true);
-			mainForm.setLocationRelativeTo(null);
-			dispose();
-
-		} catch (IllegalArgumentException ex) {
-			JOptionPane.showMessageDialog(this, ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-		}
-	}
+        PINForm pinForm = new PINForm(context, currentUser, currentAccount, amount);
+        pinForm.setVisible(true);
+        pinForm.setLocationRelativeTo(null);
+        dispose();
+}
 
 	private void onButtonCancel() {
 		WithDrawForm backTowithDrawForm = new WithDrawForm(context, currentUser, currentAccount);
