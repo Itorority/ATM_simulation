@@ -17,10 +17,11 @@ import javax.swing.border.EmptyBorder;
 
 import org.springframework.context.ApplicationContext;
 
+import group20.example.demo.controller.MainController;
 import group20.example.demo.model.AccountModel;
 import group20.example.demo.model.UserModel;
 
-public class MainForm extends JFrame {
+public class MainForm extends JFrame implements IForm {
 
     private static MainForm instance;
     private final ApplicationContext context;
@@ -87,19 +88,6 @@ public class MainForm extends JFrame {
         profileButton.setBackground(new Color(30, 144, 255));
         profileButton.setForeground(Color.WHITE);
        
-
-        profileButton.addActionListener(e -> {
-            ProfileForm profileForm;
-            if (context != null) {
-                profileForm = new ProfileForm(context, getInstance(context, currentUser, currentAccount), currentUser, currentAccount);
-            } else {
-                profileForm = new ProfileForm(context, this, currentUser, currentAccount);
-            }
-            profileForm.setUserInfo(currentUser, currentAccount);
-            profileForm.setLocation(this.getLocation());  // or use this.getLocation() if you want
-            profileForm.setVisible(true);
-        });
-
         JPanel profilePanel = new JPanel();
         profilePanel.setOpaque(false);
         profilePanel.add(profileButton);
@@ -158,34 +146,13 @@ public class MainForm extends JFrame {
             contentPanel.add(btn);
         }
 
-        rutTienBtn.addActionListener(e -> {
-        	WithDrawForm withDrawForm = new WithDrawForm(context, currentUser, currentAccount);
-            withDrawForm.setLocation(this.getLocation()); 
-            withDrawForm.setVisible(true);
-            this.dispose();
-        });
-        
-        napTienBtn.addActionListener(e -> {
-        	DepositForm depositForm = new DepositForm(context, currentUser, currentAccount);
-        	depositForm.setLocation(this.getLocation()); 
-        	depositForm.setVisible(true);
-            this.dispose();
-        });
-        
-        chuyenKhoanBtn.addActionListener(e -> {
-        	MoneyTransferForm moneyTransferForm = new MoneyTransferForm(context, currentUser, currentAccount);
-        	moneyTransferForm.setLocation(this.getLocation()); 
-        	moneyTransferForm.setVisible(true);
-            this.dispose();
-        });
-        
-        doiPinBtn.addActionListener(e -> {
-        	PINForm pinForm = new PINForm(context, currentUser, currentAccount);
-        	pinForm.setLocation(this.getLocation()); 
-        	pinForm.setVisible(true);
-            this.dispose();
-        });
+        MainController controller = new MainController(context, currentUser, currentAccount);
 
+        rutTienBtn.addActionListener(e -> controller.openWithdrawForm(this));
+        napTienBtn.addActionListener(e -> controller.openDepositForm(this));
+        chuyenKhoanBtn.addActionListener(e -> controller.openTransferForm(this));
+        doiPinBtn.addActionListener(e -> controller.openPinForm(this));
+        profileButton.addActionListener(e -> controller.openProfileForm(this));
     }
 
     public static void main(String[] args) {
@@ -204,4 +171,10 @@ public class MainForm extends JFrame {
             mainForm.setVisible(true);
         });
     }
+
+	@Override
+	public void showForm() {
+		// TODO Auto-generated method stub
+		this.setVisible(true);
+	}
 }
