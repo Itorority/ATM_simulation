@@ -23,9 +23,13 @@ import org.springframework.context.ApplicationContext;
 public class PINForm extends JFrame {
 	
 	private ApplicationContext context;
+	private UserModel currentUser;
+	private AccountModel currentAccount;
 	
-	public PINForm(ApplicationContext context) {
+	public PINForm(ApplicationContext context, UserModel currentUser, AccountModel currentAccount) {
 		this.context = context;
+		this.currentUser = currentUser;
+		this.currentAccount = currentAccount;
 		initUI();
 
 
