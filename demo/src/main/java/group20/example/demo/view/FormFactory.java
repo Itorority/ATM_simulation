@@ -18,7 +18,7 @@ public class FormFactory {
             case TRANSFER:
                 return new MoneyTransferForm(context, user, account);
             case PIN:
-                return new PINForm(context, user, account);
+                return new ChangePINForm(context, user, account);
             case PROFILE:
                 return new ProfileForm(context, MainForm.getInstance(context, user, account), user, account);
             default:
