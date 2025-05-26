@@ -19,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 import org.springframework.context.ApplicationContext;
 
 import group20.example.demo.controller.AccountController;
+import group20.example.demo.controller.ConfirmWithDrawController;
 import group20.example.demo.controller.UserController;
 import group20.example.demo.model.AccountModel;
 import group20.example.demo.model.UserModel;
@@ -127,20 +128,17 @@ public class ConfirmWithDrawForm extends JFrame {
 	}
 
 	private void onButtonConfirm() {
-		UserController userController = context.getBean(UserController.class);
-		AccountController accountController = context.getBean(AccountController.class);
-		
-		try {
-			userController.withdrawMoney(currentUser.getUserId(), currentAccount.getPinHash(), amount);
+		ConfirmWithDrawController confirmWithDrawController = context.getBean(ConfirmWithDrawController.class);
 			
-			currentAccount = accountController.findAccountById(currentUser.getUserId());
+		try {
+			currentAccount = confirmWithDrawController.confirmWithDraw(currentUser, currentAccount, amount);
 			
 			JOptionPane.showMessageDialog(this, "Rút tiền thành công!");
 			
-		        MainForm mainForm = MainForm.getInstance(context, currentUser, currentAccount);
-		        mainForm.setLocationRelativeTo(null);
-		        mainForm.setVisible(true);
-		        dispose();
+			MainForm mainForm = MainForm.getInstance(context, currentUser, currentAccount);
+			mainForm.setVisible(true);
+			mainForm.setLocationRelativeTo(null);
+			dispose();
 
 		} catch (IllegalArgumentException ex) {
 			JOptionPane.showMessageDialog(this, ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
