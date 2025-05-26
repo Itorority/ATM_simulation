@@ -1,3 +1,4 @@
+
 package group20.example.demo.controller;
 
 import org.springframework.stereotype.Controller;
@@ -29,4 +30,9 @@ public class PINController {
 		return confirmWithDrawController.confirmWithDraw(currentUser, currentAccount, amount);
 	}
 	
+	public AccountModel changePIN(AccountModel currentAccount, String newPIN) {
+		accountController.changePIN(currentAccount.getUserId(), newPIN);
+		return accountController.findAccountById(currentAccount.getUserId());
+	}
+
 }

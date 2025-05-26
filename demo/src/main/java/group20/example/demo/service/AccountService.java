@@ -35,8 +35,7 @@ public class AccountService {
   }
 
   /**
-   * lấy thông tin tài khoản dựa vào id người dùng
-   * object
+   * lấy thông tin tài khoản dựa vào id người dùng object
    * 
    * @param userId
    * @return Account
@@ -167,8 +166,7 @@ public class AccountService {
     BigDecimal senderBalance = sender.getBalance().subtract(BigDecimal.valueOf(money));
     accountRepository.updateBalanceByUserId(sender.getUserId(), senderBalance);
     // save transaction of sender
-    Transaction senderTransaction = new Transaction(sender.getAccountNumber(), "TRANSFER",
-        LocalDateTime.now(),
+    Transaction senderTransaction = new Transaction(sender.getAccountNumber(), "TRANSFER", LocalDateTime.now(),
         "Chuyển số tiền : " + money + ".000 VND vào tai khoản " + reciver.getAccountNumber() + " .");
     transactionService.saveTransaction(senderTransaction);
     System.out.println("Transaction saved successfully!");
@@ -179,12 +177,27 @@ public class AccountService {
     accountRepository.updateBalanceByUserId(reciver.getUserId(), reciverBalance);
 
     // save transaction of reciver
-    Transaction reciverTransaction = new Transaction(reciver.getAccountNumber(), "TRANSFER",
-        LocalDateTime.now(), "Nhận số tiền : " + money + ".000 VND từ tài khoản "
-            + sender.getAccountNumber() + " .");
+    Transaction reciverTransaction = new Transaction(reciver.getAccountNumber(), "TRANSFER", LocalDateTime.now(),
+        "Nhận số tiền : " + money + ".000 VND từ tài khoản " + sender.getAccountNumber() + " .");
     transactionService.saveTransaction(reciverTransaction);
     System.out.println("Transaction saved successfully!");
 
   }
 
+  /**
+   * Thay đổi mã PIN
+   * 
+   * @param userId
+   * @param newPIN
+   * @return
+   */
+
+  public boolean changePIN(Long userId, String newPIN) {
+    Account account = findAccountById(userId);
+    if (account != null) {
+      account.setPinHash(newPIN);
+      return true;
+    }
+    return false;
+  }
 }

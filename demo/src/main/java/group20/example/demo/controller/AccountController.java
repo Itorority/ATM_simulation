@@ -9,7 +9,6 @@ import group20.example.demo.service.AccountService;
 
 @Controller
 public class AccountController {
-
     private AccountService accountService;
 
     public AccountController(AccountService accountService) {
@@ -37,4 +36,8 @@ public class AccountController {
         accountService.updateBalanceByAccountNumber(userId, pin, accountNumber, money);
     }
 
+    // Cập nhật mã PIN mới
+    public void changePIN(Long userId, String newPIN2) {
+        accountService.changePIN(userId, newPIN2);
+    }
 }
