@@ -1,7 +1,6 @@
 package group20.example.demo.view;
 
 import java.awt.BorderLayout;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -13,26 +12,34 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import org.springframework.context.ApplicationContext;
+
+import group20.example.demo.controller.AccountController;
+import group20.example.demo.controller.UserController;
 import group20.example.demo.model.AccountModel;
 import group20.example.demo.model.UserModel;
+import group20.example.demo.service.AccountService;
+import group20.example.demo.service.UserService;
 
 public class MoneyTransferForm extends JFrame implements IForm {
 	private final ApplicationContext context;
 	private UserModel currentUser;
 	private AccountModel currentAccount;
+	public JTextField numberField;
+	public JTextField pinField;
+	public JTextField moneyField;
 
 	public MoneyTransferForm(ApplicationContext context, UserModel currentUser, AccountModel currentAccount) {
 		this.context = context;
 		this.currentUser = currentUser;
 		this.currentAccount = currentAccount;
 		initUI();
-		
+
 	}
 
 	private void initUI() {
@@ -89,22 +96,37 @@ public class MoneyTransferForm extends JFrame implements IForm {
 		profilePanel.setLayout(new BoxLayout(profilePanel, BoxLayout.Y_AXIS));
 		profilePanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		profilePanel.setBackground(Color.WHITE);
+		// Thay phần profilePanel bằng đoạn code sau:
 
-		JLabel userLabel = new JLabel("NGUYEN VAN A");
-		userLabel.setFont(new Font("Arial", Font.BOLD, 20));
-		userLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		// Thay thế JLabel userLabel và userIDLabel bằng JTextField
+		JLabel numberLabel = new JLabel("Số Tài Khoản người nhận:");
+		numberLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+		numberLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		JLabel userIDLabel = new JLabel("User ID: 092122xx");
-		userIDLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-		userIDLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		numberField = new JTextField();
+		numberField.setMaximumSize(new Dimension(300, 30)); // Giới hạn kích thước
+		numberField.setFont(new Font("Arial", Font.PLAIN, 18));
+		numberField.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+		JLabel pinLabel = new JLabel("Mã Pin :");
+		pinLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+		pinLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+		pinField = new JTextField();
+		pinField.setMaximumSize(new Dimension(300, 30)); // Giới hạn kích thước
+		pinField.setFont(new Font("Arial", Font.PLAIN, 18));
+		pinField.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+		// Thêm vào profilePanel
 		profilePanel.add(Box.createVerticalStrut(10));
+		profilePanel.add(numberLabel);
+		profilePanel.add(numberField);
 		profilePanel.add(Box.createVerticalStrut(10));
-		profilePanel.add(userLabel);
-		profilePanel.add(userIDLabel);
+		profilePanel.add(pinLabel);
+		profilePanel.add(pinField);
 		profilePanel.add(Box.createVerticalStrut(10));
 
-		JTextField moneyField = new JTextField();
+		moneyField = new JTextField();
 		JLabel moneyText = new JLabel("Nhập số tiền cần chuyển");
 		moneyText.setFont(new Font("Arial", Font.PLAIN, 25));
 		moneyText.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -115,7 +137,16 @@ public class MoneyTransferForm extends JFrame implements IForm {
 		line.setBackground(Color.GRAY);
 
 		JButton confirmButton = new JButton("Xác nhận");
+		confirmButton.addActionListener(e -> {
+			Long userId = currentUser.getUserId();
+			String pin = pinField.getText().trim();
+			String accountNumber = numberField.getText().trim();
+			Double amount = Double.parseDouble(moneyField.getText().trim());
+			this.transferMoney(userId, pin, accountNumber, amount);
+
+		});
 		JButton cancelButton = new JButton("Hủy bỏ");
+		cancelButton.addActionListener(e -> onButtonCancel());
 
 		Dimension buttonSize = new Dimension(200, 100);
 		confirmButton.setPreferredSize(buttonSize);
@@ -157,9 +188,43 @@ public class MoneyTransferForm extends JFrame implements IForm {
 		this.setVisible(true);
 	}
 
-//	public static void main(String[] args) {
-//		SwingUtilities.invokeLater(() -> {
-//			new MoneyTransferForm().setVisible(true);
-//		});
-//	}
+	private void onButtonCancel() {
+		MainForm mainForm = MainForm.getInstance(context, currentUser, currentAccount);
+		mainForm.setLocationRelativeTo(null);
+		mainForm.setVisible(true);
+		dispose();
+	}
+
+	/**
+	 * funtion to transfer money to another account
+	 * 
+	 * @param email         the email of the receiver
+	 * @param accountNumber the account number of the receiver
+	 * @param amount        the amount of money to transfer
+	 * 
+	 */
+
+	private void transferMoney(Long id, String pin, String accountNumber, double amount) {
+		UserService userService = context.getBean(UserService.class);
+
+		UserController userController = new UserController(userService);
+
+		AccountService accountService = context.getBean(AccountService.class);
+		AccountController accountController = new AccountController(accountService);
+		try {
+			userController.transferMoney(id, pin, accountNumber, amount);
+			dispose();
+			JOptionPane.showMessageDialog(this, "Chuyển tiền thành công!");
+
+			// Cập nhật lại thông tin tài khoản
+			AccountModel updatedAccount = accountController.findAccountById(id);
+			System.out.println("Updated Account: " + updatedAccount.getBalance());
+			MainForm mainForm = MainForm.getInstance(context, currentUser, updatedAccount);
+			mainForm.setVisible(true);
+			mainForm.setLocationRelativeTo(null);
+			dispose();
+		} catch (IllegalArgumentException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+		}
+	}
 }

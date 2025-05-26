@@ -12,13 +12,11 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import org.springframework.context.ApplicationContext;
 
-import group20.example.demo.controller.ConfirmWithDrawController;
 import group20.example.demo.model.AccountModel;
 import group20.example.demo.model.UserModel;
 
@@ -126,11 +124,11 @@ public class ConfirmWithDrawForm extends JFrame {
 	}
 
 	private void onButtonConfirm() {
-        PINForm pinForm = new PINForm(context, currentUser, currentAccount, amount);
-        pinForm.setVisible(true);
-        pinForm.setLocationRelativeTo(null);
-        dispose();
-}
+		PINForm pinForm = new PINForm(context, currentUser, currentAccount, amount);
+		pinForm.setVisible(true);
+		pinForm.setLocationRelativeTo(null);
+		dispose();
+	}
 
 	private void onButtonCancel() {
 		WithDrawForm backTowithDrawForm = new WithDrawForm(context, currentUser, currentAccount);
