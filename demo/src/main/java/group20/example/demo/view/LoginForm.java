@@ -17,13 +17,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import org.springframework.context.ApplicationContext;
 
 import group20.example.demo.controller.LoginController;
-import group20.example.demo.controller.UserController;
 import group20.example.demo.service.AccountService;
 import group20.example.demo.service.UserService;
 
@@ -36,14 +34,11 @@ public class LoginForm extends JFrame {
     
     // Spring context và controller
     private final ApplicationContext context;
-    private final UserController userController;
 
     // nhận Spring context, dùng để lấy các Bean
     public LoginForm(ApplicationContext context) {
         this.context = context;
         
-     // Nếu context không null thì lấy UserController từ Spring container
-        this.userController = (context != null) ? context.getBean(UserController.class) : null;
         initUI();
     }
 
