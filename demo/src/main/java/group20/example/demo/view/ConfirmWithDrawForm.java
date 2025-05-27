@@ -20,6 +20,7 @@ import org.springframework.context.ApplicationContext;
 import group20.example.demo.model.AccountModel;
 import group20.example.demo.model.UserModel;
 
+// ConfirmWithDrawForm là màn hình hiển thị việc xác nhận giao dịch rút tiền với số tiền đã chọn
 public class ConfirmWithDrawForm extends JFrame {
 
 	private ApplicationContext context;
@@ -44,20 +45,22 @@ public class ConfirmWithDrawForm extends JFrame {
 		setLocationRelativeTo(null);
 		setResizable(false);
 
-		// main
+		// Panel chính sử dụng BorderLayout
 		JPanel jpMain = new JPanel(new BorderLayout());
 		jpMain.setBackground(new Color(220, 220, 220));
 		setContentPane(jpMain);
 
-		// top panel
+		// ====== Panel trên hiển thị Logo và Hotline =====
 		JPanel jpTop = new JPanel();
 		jpTop.setLayout(new BoxLayout(jpTop, BoxLayout.X_AXIS));
 		jpTop.setBorder(new EmptyBorder(20, 30, 20, 30));
 
+		// Panel logo
 		JLabel labLogo = new JLabel("ATM Simulator");
 		labLogo.setFont(new Font("Arial", Font.BOLD, 25));
 		jpTop.add(labLogo);
-
+		
+		// Panel Hotline
 		JPanel jpHotline = new JPanel();
 		jpHotline.setLayout(new BoxLayout(jpHotline, BoxLayout.Y_AXIS));
 		jpHotline.setOpaque(false);
@@ -72,7 +75,7 @@ public class ConfirmWithDrawForm extends JFrame {
 		jpTop.add(Box.createHorizontalGlue());
 		jpTop.add(jpHotline, BorderLayout.EAST);
 
-		// center panel
+		// ===== Panel trung tâm hiển thị nội dung xác nhận số tiền muốn rút =====
 		JPanel jpCenter = new JPanel();
 		jpCenter.setLayout(new BoxLayout(jpCenter, BoxLayout.Y_AXIS));
 		jpCenter.setBorder(new EmptyBorder(100, 30, 20, 30));
@@ -90,14 +93,16 @@ public class ConfirmWithDrawForm extends JFrame {
 		jpCenter.add(Box.createVerticalStrut(20));
 		jpCenter.add(labBalance);
 
-		// bottom panel
+		// ===== Panel dưới chưa các nút để xác nhận và huỷ bỏ giao dịch =====
 		JPanel jpBottom = new JPanel();
 		jpBottom.setLayout(new FlowLayout(FlowLayout.CENTER));
 		jpBottom.setBorder(new EmptyBorder(20, 30, 100, 30));
-
+		
+		// tạo các nút xác nhận, huỷ bỏ
 		JButton btnConfirm = createButton("Xác nhận");
 		JButton btnCancel = createButton("Huỷ bỏ");
-
+		
+		// gán sự kiện cho 2 nút
 		btnConfirm.addActionListener(e -> onButtonConfirm());
 		btnCancel.addActionListener(e -> onButtonCancel());
 
@@ -110,6 +115,7 @@ public class ConfirmWithDrawForm extends JFrame {
 		jpMain.add(jpBottom, BorderLayout.SOUTH);
 	}
 
+	// tạo nút với các định dạng cho sẵn
 	private JButton createButton(String text) {
 		Dimension btnSize = new Dimension(200, 60);
 		JButton btn = new JButton(text);
@@ -123,6 +129,7 @@ public class ConfirmWithDrawForm extends JFrame {
 		return btn;
 	}
 
+	// tạo sự kiện cho nút xác nhận
 	private void onButtonConfirm() {
 		PINForm pinForm = new PINForm(context, currentUser, currentAccount, amount);
 		pinForm.setVisible(true);
@@ -130,6 +137,7 @@ public class ConfirmWithDrawForm extends JFrame {
 		dispose();
 	}
 
+	// tạo sự kiện cho nút huỷ bỏ
 	private void onButtonCancel() {
 		WithDrawForm backTowithDrawForm = new WithDrawForm(context, currentUser, currentAccount);
 		backTowithDrawForm.setVisible(true);
