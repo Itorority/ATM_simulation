@@ -15,12 +15,22 @@ public class MoneyTransferController {
         this.currentAccount = currentAccount;
     }
 
+    /**
+     * Thực hiện chuyển tiền từ tài khoản hiện tại tới tài khoản người nhận
+     * 
+     * @param senderUserId          ID người gửi (userId)
+     * @param pin                   Mã PIN xác nhận giao dịch
+     * @param recipientAccountNumber Số tài khoản người nhận
+     * @param amount                Số tiền cần chuyển
+     * @throws RuntimeException     Nếu giao dịch thất bại (ví dụ: sai PIN, số dư không đủ)
+     */
+    
     public void transfer(long senderUserId, String pin, String recipientAccountNumber, double amount) {
-        // Perform the transfer (throws exception if something fails)
+    	// Gọi service để thực hiện chuyển tiền, nếu có lỗi sẽ ném exception
         accountService.updateBalanceByAccountNumber(senderUserId, pin, recipientAccountNumber, amount);
 
-        // After successful transfer, update local model to reflect new balance
+        // Nếu chuyển tiền thành công, lấy lại số dư mới nhất của tài khoản gửi
         BigDecimal updatedBalance = accountService.findAccountById(senderUserId).getBalance();
-        currentAccount.setBalance(updatedBalance); // triggers BalanceChangeListener in MainForm
+        currentAccount.setBalance(updatedBalance); // Kích hoạt ChangeListener
     }
 }
