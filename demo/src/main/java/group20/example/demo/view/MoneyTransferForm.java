@@ -36,49 +36,43 @@ public class MoneyTransferForm extends JFrame implements IForm {
 		setContentPane(mainPanel);
 
 		// ===== Panel trên cùng: chứa logo và hotline =====
-		JPanel topPanel = new JPanel();
-		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
-		topPanel.setOpaque(false);
-		topPanel.setBorder(new EmptyBorder(20, 30, 20, 30));
-
-		// Logo ATM
+		JPanel jpTop = new JPanel();
+		jpTop.setLayout(new BoxLayout(jpTop, BoxLayout.X_AXIS));
+		jpTop.setOpaque(false);
+		jpTop.setBorder(new EmptyBorder(20, 30, 20, 30));
+		
+		// Panel logo
 		JLabel labLogo = new JLabel("ATM Simulator");
 		labLogo.setFont(new Font("Arial", Font.BOLD, 25));
-		topPanel.add(labLogo);
+		jpTop.add(labLogo);
 
-		topPanel.add(Box.createHorizontalGlue()); 
-		// Panel hotline
+		// Panel Hotline
 		JPanel jpHotline = new JPanel();
 		jpHotline.setLayout(new BoxLayout(jpHotline, BoxLayout.Y_AXIS));
 		jpHotline.setOpaque(false);
-
 		JLabel labHot1 = new JLabel("HOTLINE ATM");
 		labHot1.setFont(new Font("Arial", Font.PLAIN, 15));
-
+		labHot1.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		JLabel labHot2 = new JLabel("1900 1010 - 1010 1900");
 		labHot2.setFont(new Font("Arial", Font.PLAIN, 15));
-
+		labHot2.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		jpHotline.add(labHot1);
 		jpHotline.add(labHot2);
-		topPanel.add(jpHotline);
+		jpTop.add(Box.createHorizontalGlue());
+		jpTop.add(jpHotline, BorderLayout.EAST);
 
-		mainPanel.add(topPanel, BorderLayout.NORTH); 
+		mainPanel.add(jpTop, BorderLayout.NORTH); 
 
 		// ===== Panel nội dung chính =====
 		JPanel contentPanel = new JPanel();
 		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 		contentPanel.setOpaque(false);
 
-		// Tiêu đề
-		JLabel titleEN = new JLabel("Money Transfer");
-		titleEN.setFont(new Font("Arial", Font.BOLD, 25));
-		titleEN.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		JLabel titleVN = new JLabel("Chuyển tiền");
-		titleVN.setFont(new Font("Arial", Font.PLAIN, 25));
+		titleVN.setFont(new Font("Arial", Font.BOLD, 38));
 		titleVN.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		contentPanel.add(titleEN);
 		contentPanel.add(titleVN);
 		contentPanel.add(Box.createVerticalStrut(20)); 
 
@@ -132,8 +126,8 @@ public class MoneyTransferForm extends JFrame implements IForm {
 		JButton confirmButton = new JButton("Xác nhận");
 		JButton cancelButton = new JButton("Hủy bỏ");
 
-		confirmButton.setFont(new Font("Arial", Font.BOLD, 18));
-		cancelButton.setFont(new Font("Arial", Font.BOLD, 18));
+		confirmButton.setFont(new Font("Arial", Font.BOLD, 25));
+		cancelButton.setFont(new Font("Arial", Font.BOLD, 25));
 		
 		confirmButton.setBackground(Color.BLUE);
 		confirmButton.setForeground(Color.WHITE);
