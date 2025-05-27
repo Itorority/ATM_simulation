@@ -162,12 +162,9 @@ public class AccountService {
 	 * @return
 	 */
 
-	public boolean changePIN(Long userId, String newPIN) {
+	public void changePIN(Long userId, String newPIN) {
 		Account account = findAccountById(userId);
-		if (account != null) {
-			account.setPinHash(newPIN);
-			return true;
-		}
-		return false;
+		account.setPinHash(newPIN);
+		accountRepository.updatePinByUserId(userId, newPIN);
 	}
 }
