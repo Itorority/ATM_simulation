@@ -9,48 +9,50 @@ import javax.swing.border.EmptyBorder;
 
 import org.springframework.context.ApplicationContext;
 
+import group20.example.demo.controller.ProfileController;
+import group20.example.demo.controller.UserController;
 import group20.example.demo.model.AccountModel;
 import group20.example.demo.model.UserModel;
 
-/**
- * Giao diện hiển thị thông tin hồ sơ người dùng
- */
 public class ProfileForm extends JFrame implements IForm {
     private ApplicationContext context;
     private MainForm mainForm;
 
     private UserModel user;
     private AccountModel account;
+    
+    private ProfileController profileController;
+    private UserController userController;
 
-    private JLabel userLabel, userIDLabel, lblIdentity, lblEmail, lblChangePassword, lblBalance;
+
+    private JLabel userLabel, userIDLabel, lblEmail, lblIdentity, lblPassword, lblPin, lblBalance;
     private JButton exitButton, logoutButton;
+    private JButton btnEditEmail, btnEditPassword;
 
     public ProfileForm(ApplicationContext context, MainForm mainForm, UserModel user, AccountModel account) {
         this.context = context;
         this.mainForm = mainForm;
         this.user = user;
         this.account = account;
+        this.userController = context.getBean(UserController.class);
+        this.profileController = new ProfileController(userController);
 
-        initUI(); 
+        initUI();
         setUserInfo(user, account);
     }
 
-    /**
-     * Hiển thị thông tin người dùng và tài khoản lên các label
-     */
-    public void setUserInfo(UserModel user, AccountModel account) {
+    private void setUserInfo(UserModel user, AccountModel account) {
         userLabel.setText(user != null ? user.getFullName() : "Chưa rõ");
         userIDLabel.setText("User ID: " + (user != null ? user.getUserId() : "N/A"));
         lblEmail.setText("Email: " + (user != null ? user.getEmail() : "N/A"));
         lblIdentity.setText("SĐT: " + (user != null ? user.getPhoneNumber() : "N/A"));
-        lblChangePassword.setText("Mã PIN: " + (account != null ? account.getPinHash() : "N/A"));
+        lblPassword.setText("Mật khẩu: " + (user != null ? "******" : "N/A"));
+        lblPin.setText("Mã PIN: " + (account != null ? account.getPinHash() : "N/A"));
 
-        // Định dạng số dư tài khoản
         if (account != null && account.getBalance() != null) {
             BigDecimal balance = account.getBalance();
             NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
-            String formattedBalance = nf.format(balance) + " VNĐ";
-            lblBalance.setText("Số dư: " + formattedBalance);
+            lblBalance.setText("Số dư: " + nf.format(balance) + " VNĐ");
         } else {
             lblBalance.setText("Số dư: 0 VNĐ");
         }
@@ -58,30 +60,42 @@ public class ProfileForm extends JFrame implements IForm {
 
     private void initUI() {
         setTitle("Hồ sơ người dùng");
-        setLocationRelativeTo(mainForm);
         setSize(800, 600);
+        setLocationRelativeTo(mainForm);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(false);
 
-        // Panel chính
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
+        JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(new Color(220, 220, 220));
         setContentPane(mainPanel);
 
-        // ===== Panel trên cùng: Logo và hotline =====
+        mainPanel.add(createTopPanel(), BorderLayout.NORTH);
+        mainPanel.add(createContentPanel(), BorderLayout.CENTER);
+        
+        JScrollPane scrollPane = new JScrollPane(createContentPanel());
+        scrollPane.setBorder(null);
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
+
+    }
+
+    private JPanel createTopPanel() {
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
-        topPanel.setOpaque(false);
         topPanel.setBorder(new EmptyBorder(20, 30, 20, 30));
+        topPanel.setOpaque(false);
 
-        JLabel labLogo = new JLabel("ATM Simulator");
-        labLogo.setFont(new Font("Arial", Font.BOLD, 25));
-        topPanel.add(labLogo);
-
+        JLabel logo = new JLabel("ATM Simulator");
+        logo.setFont(new Font("Arial", Font.BOLD, 25));
+        topPanel.add(logo);
         topPanel.add(Box.createHorizontalGlue());
 
-        // Thông tin hotline
+        JPanel hotlinePanel = new JPanel();
+        hotlinePanel.setLayout(new BoxLayout(hotlinePanel, BoxLayout.Y_AXIS));
+        hotlinePanel.setOpaque(false);
+
+        hotlinePanel.add(new JLabel("HOTLINE ATM"));
+        hotlinePanel.add(new JLabel("1900 1010 - 1010 1900"));
+        
         JPanel jpHotline = new JPanel();
         jpHotline.setLayout(new BoxLayout(jpHotline, BoxLayout.Y_AXIS));
         jpHotline.setOpaque(false);
@@ -98,27 +112,38 @@ public class ProfileForm extends JFrame implements IForm {
         jpHotline.add(labHot2);
         topPanel.add(jpHotline);
 
-        mainPanel.add(topPanel, BorderLayout.NORTH);
+        return topPanel;
+    }
 
-        // ===== Nội dung chính =====
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-        contentPanel.setOpaque(false);
-        contentPanel.setBorder(new EmptyBorder(20, 150, 20, 150));
+    private JPanel createContentPanel() {
+        JPanel content = new JPanel();
+        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+        content.setBorder(new EmptyBorder(20, 150, 20, 150));
+        content.setOpaque(false);
 
-        // Tiêu đề
-        JLabel titleLabel = new JLabel("HỒ SƠ NGƯỜI DÙNG");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 25));
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        contentPanel.add(titleLabel);
-        contentPanel.add(Box.createVerticalStrut(20));
+        JLabel title = new JLabel("HỒ SƠ NGƯỜI DÙNG");
+        title.setFont(new Font("Arial", Font.BOLD, 25));
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Panel hiển thị tên và ID
-        JPanel profilePanel = new JPanel();
-        profilePanel.setLayout(new BoxLayout(profilePanel, BoxLayout.Y_AXIS));
-        profilePanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-        profilePanel.setBackground(Color.WHITE);
-        profilePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        content.add(title);
+        content.add(Box.createVerticalStrut(20));
+        content.add(createProfileBox());
+        content.add(Box.createVerticalStrut(20));
+        content.add(createInfoBox());
+        content.add(Box.createVerticalStrut(20));
+        content.add(createButtonBox());
+        
+        
+
+        return content;
+    }
+
+    private JPanel createProfileBox() {
+        JPanel profileBox = new JPanel();
+        profileBox.setLayout(new BoxLayout(profileBox, BoxLayout.Y_AXIS));
+        profileBox.setBackground(Color.WHITE);
+        profileBox.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        profileBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         userLabel = new JLabel("Tên người dùng");
         userLabel.setFont(new Font("Arial", Font.BOLD, 25));
@@ -128,39 +153,83 @@ public class ProfileForm extends JFrame implements IForm {
         userIDLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         userIDLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        profilePanel.add(Box.createVerticalStrut(15));
-        profilePanel.add(userLabel);
-        profilePanel.add(Box.createVerticalStrut(5));
-        profilePanel.add(userIDLabel);
-        profilePanel.add(Box.createVerticalStrut(15));
-        contentPanel.add(profilePanel);
-        contentPanel.add(Box.createVerticalStrut(20));
+        profileBox.add(Box.createVerticalStrut(15));
+        profileBox.add(userLabel);
+        profileBox.add(Box.createVerticalStrut(5));
+        profileBox.add(userIDLabel);
+        profileBox.add(Box.createVerticalStrut(15));
 
-        // ===== Thông tin chi tiết =====
-        JPanel infoPanel = new JPanel();
-        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-        infoPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-        infoPanel.setBackground(Color.WHITE);
+        return profileBox;
+    }
 
-        lblEmail = createInfoLabel("Email: ");
-        lblIdentity = createInfoLabel("SĐT: ");
-        lblChangePassword = createInfoLabel("Mã PIN: ");
-        lblBalance = createInfoLabel("Số dư: ");
+    private JPanel createInfoBox() {
+        JPanel box = new JPanel();
+        box.setLayout(new BoxLayout(box, BoxLayout.Y_AXIS));
+        box.setBackground(Color.WHITE);
+        box.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 
-        infoPanel.add(lblEmail);
-        infoPanel.add(createSeparator());
-        infoPanel.add(lblIdentity);
-        infoPanel.add(createSeparator());
-        infoPanel.add(lblChangePassword);
-        infoPanel.add(createSeparator());
-        infoPanel.add(lblBalance);
+        lblEmail = new JLabel();
+        btnEditEmail = createEditButton(() -> editEmail());
+        box.add(createInfoRow(lblEmail, btnEditEmail));
+        box.add(createSeparator());
 
-        contentPanel.add(infoPanel);
-        mainPanel.add(contentPanel, BorderLayout.CENTER);
+        lblIdentity = createInfoLabel();
+        box.add(createInfoRow(lblIdentity, null));
+        box.add(createSeparator());
 
-        // ===== Các nút điều hướng =====
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
-        buttonPanel.setOpaque(false);
+        lblPassword = new JLabel();
+        btnEditPassword = createEditButton(() -> editPassword());
+        box.add(createInfoRow(lblPassword, btnEditPassword));
+        box.add(createSeparator());
+
+        lblPin = createInfoLabel();
+        box.add(createInfoRow(lblPin, null));
+        box.add(createSeparator());
+
+        lblBalance = createInfoLabel();
+        box.add(createInfoRow(lblBalance, null));
+
+        return box;
+    }
+
+    private JPanel createInfoRow(JLabel label, JButton button) {
+        JPanel row = new JPanel(new BorderLayout());
+        row.setOpaque(false);
+        row.setBorder(new EmptyBorder(10, 10, 10, 10));
+        label.setFont(new Font("Arial", Font.PLAIN, 20));
+        row.add(label, BorderLayout.CENTER);
+        if (button != null) {
+            row.add(button, BorderLayout.EAST);
+        }
+        return row;
+    }
+
+    private JButton createEditButton(Runnable onClick) {
+        JButton btn = new JButton("Sửa");
+        btn.setFont(new Font("Arial", Font.PLAIN, 16));
+        btn.setFocusable(false);
+        btn.addActionListener(e -> onClick.run());
+        return btn;
+    }
+
+    private JLabel createInfoLabel() {
+        JLabel label = new JLabel();
+        label.setFont(new Font("Arial", Font.PLAIN, 20));
+        return label;
+    }
+
+    private Component createSeparator() {
+        JPanel line = new JPanel();
+        line.setPreferredSize(new Dimension(0, 1));
+        line.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
+        line.setBackground(Color.GRAY);
+        return line;
+    }
+
+    private JPanel createButtonBox() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+        panel.setOpaque(false);
 
         exitButton = new JButton("Thoát");
         logoutButton = new JButton("Đăng xuất");
@@ -171,59 +240,76 @@ public class ProfileForm extends JFrame implements IForm {
 
         exitButton.setBackground(Color.BLUE);
         exitButton.setForeground(Color.WHITE);
-
         logoutButton.setBackground(Color.BLUE);
         logoutButton.setForeground(Color.WHITE);
 
-        buttonPanel.add(exitButton);
-        buttonPanel.add(logoutButton);
-
-        contentPanel.add(Box.createVerticalStrut(20));
-        contentPanel.add(buttonPanel);
-
-        // ===== Xử lý sự kiện =====
-        // Khi nhấn nút Thoát
         exitButton.addActionListener(e -> {
-            this.dispose();        
-            if (mainForm != null) {
-                mainForm.showForm(); // quay lại màn hình chính
-            }
+            dispose();
+            if (mainForm != null) mainForm.showForm();
         });
 
-        // Khi nhấn nút Đăng xuất
         logoutButton.addActionListener(e -> {
-            this.dispose();
-            if (mainForm != null) {
-                mainForm.dispose(); // đóng màn hình chính
-            }
-
-            // Mở lại màn hình đăng nhập
-            LoginForm loginForm = new LoginForm(context);
+            dispose();
+            if (mainForm != null) mainForm.dispose();
             MainForm.resetInstance();
+            LoginForm loginForm = new LoginForm(context);
             loginForm.setLocationRelativeTo(null);
             loginForm.setVisible(true);
         });
+
+        panel.add(Box.createHorizontalGlue());
+        panel.add(exitButton);
+        panel.add(Box.createRigidArea(new Dimension(10, 0))); // khoảng cách nhỏ giữa 2 nút
+        panel.add(logoutButton);
+
+        return panel;
     }
 
-    // Tạo label hiển thị thông tin
-    private JLabel createInfoLabel(String text) {
-        JLabel label = new JLabel(text);
-        label.setFont(new Font("Arial", Font.PLAIN, 20));
-        label.setBorder(new EmptyBorder(10, 10, 10, 10));
-        return label;
+    private void editEmail() {
+        String newEmail = JOptionPane.showInputDialog(this, "Nhập email mới:", user.getEmail());
+        if (newEmail != null) {
+            newEmail = newEmail.trim();
+            if (!newEmail.isEmpty() && !newEmail.equals(user.getEmail())) {
+                try {
+                    profileController.updateEmail(user, newEmail);
+                    lblEmail.setText("Email: " + newEmail);
+                    JOptionPane.showMessageDialog(this, "Cập nhật email thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật email: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
     }
 
-    // Tạo dòng phân cách
-    private Component createSeparator() {
-        JPanel line = new JPanel();
-        line.setPreferredSize(new Dimension(0, 1));
-        line.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
-        line.setBackground(Color.GRAY);
-        return line;
+
+    private void editPassword() {
+        // Nhập mật khẩu cũ
+        String oldPass = JOptionPane.showInputDialog(this, "Nhập mật khẩu cũ:");
+        if (oldPass == null || !oldPass.equals(user.getUserPassword())) {
+            JOptionPane.showMessageDialog(this, "Mật khẩu cũ không đúng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Nếu mật khẩu cũ đúng, nhập mật khẩu mới
+        String newPass = JOptionPane.showInputDialog(this, "Nhập mật khẩu mới:");
+        if (newPass != null) {
+            newPass = newPass.trim();
+            if (!newPass.isEmpty() && !newPass.equals(user.getUserPassword())) {
+                try {
+                    profileController.updatePassword(user, newPass);
+                    lblPassword.setText("Mật khẩu: ******");
+                    JOptionPane.showMessageDialog(this, "Cập nhật mật khẩu thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật mật khẩu: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
     }
-    
+
+
+
     @Override
     public void showForm() {
-        this.setVisible(true);
+        setVisible(true);
     }
 }
