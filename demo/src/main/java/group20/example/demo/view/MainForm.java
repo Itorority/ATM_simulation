@@ -19,27 +19,36 @@ import org.springframework.context.ApplicationContext;
 
 import group20.example.demo.controller.MainController;
 import group20.example.demo.model.AccountModel;
+import group20.example.demo.model.ChangeListener;
 import group20.example.demo.model.UserModel;
 
-public class MainForm extends JFrame implements IForm {
+public class MainForm extends JFrame implements IForm, ChangeListener {
 
-    public static MainForm instance;
+    private static MainForm instance;
     private final ApplicationContext context;
 
     private UserModel currentUser;
     private AccountModel currentAccount;
+    
+    private JLabel balanceLabel;
 
     public MainForm(ApplicationContext context, UserModel user, AccountModel account) {
         this.context = context;
         this.currentUser = user;
         this.currentAccount = account;
+        
+        if(currentAccount != null) {
+        	currentAccount.addBalanceChangeListener(this);
+        }
+        
         initUI();
     }
 
     public static MainForm getInstance(ApplicationContext context, UserModel user, AccountModel account) {
-        // get account from userID
-
-        return instance = new MainForm(context, user, account);
+        if (instance == null) {
+            instance = new MainForm(context, user, account);
+        }
+        return instance;
     }
 
     public ApplicationContext getApplicationContext() {
@@ -73,9 +82,8 @@ public class MainForm extends JFrame implements IForm {
         usernameLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         usernameLabel.setForeground(Color.DARK_GRAY);
 
-        String balanceText = "Số dư: "
-                + (currentAccount != null ? String.format("%,.0f VNĐ", currentAccount.getBalance()) : "0 VNĐ");
-        JLabel balanceLabel = new JLabel(balanceText);
+        String balanceText = "Số dư: " + (currentAccount != null ? String.format("%,.0f VNĐ", currentAccount.getBalance()) : "0 VNĐ");
+        balanceLabel = new JLabel(balanceText);
         balanceLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         balanceLabel.setForeground(Color.DARK_GRAY);
 
@@ -87,7 +95,7 @@ public class MainForm extends JFrame implements IForm {
         profileButton.setFont(new Font("Arial", Font.BOLD, 18));
         profileButton.setBackground(new Color(30, 144, 255));
         profileButton.setForeground(Color.WHITE);
-
+       
         JPanel profilePanel = new JPanel();
         profilePanel.setOpaque(false);
         profilePanel.add(profileButton);
@@ -103,11 +111,11 @@ public class MainForm extends JFrame implements IForm {
         JLabel labHot1 = new JLabel("HOTLINE ATM");
         labHot1.setFont(new Font("Arial", Font.PLAIN, 15));
         labHot1.setAlignmentX(Component.RIGHT_ALIGNMENT);
-
+        
         JLabel labHot2 = new JLabel("1900 1010 - 1010 1900");
         labHot2.setFont(new Font("Arial", Font.PLAIN, 15));
         labHot2.setAlignmentX(Component.RIGHT_ALIGNMENT);
-
+        
         jpHotline.add(labHot1);
         jpHotline.add(labHot2);
 
@@ -153,13 +161,15 @@ public class MainForm extends JFrame implements IForm {
         chuyenKhoanBtn.addActionListener(e -> controller.openTransferForm(this));
         doiPinBtn.addActionListener(e -> controller.openPinForm(this));
         profileButton.addActionListener(e -> controller.openProfileForm(this));
+
+        
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             UserModel mockUser = new UserModel();
             mockUser.setFullName("Nguyễn Văn A");
-            // mockUser.setUserId("user123");
+            //mockUser.setUserId("user123");
             mockUser.setEmail("nguyenvana@email.com");
             mockUser.setPhoneNumber("0909123456");
 
@@ -172,9 +182,16 @@ public class MainForm extends JFrame implements IForm {
         });
     }
 
-    @Override
-    public void showForm() {
-        // TODO Auto-generated method stub
-        this.setVisible(true);
-    }
+	@Override
+	public void showForm() {
+		// TODO Auto-generated method stub
+		this.setVisible(true);
+	}
+
+	@Override
+	public void onBalanceChanged(BigDecimal newBalance) {
+	    SwingUtilities.invokeLater(() -> {
+	        balanceLabel.setText("Số dư: " + String.format("%,.0f VNĐ", newBalance));
+	    });
+	}
 }
