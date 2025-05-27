@@ -45,59 +45,83 @@ public class AccountService {
 	}
 
 	/**
-	 * cập nhật số dư tài khoản
-	 * 
+	 * Nạp tiền vào tài khoản
+	 *
 	 * @param userId
-	 * @param balance
-	 * @return
+	 * @param pin
+	 * @param amount
 	 */
-	public void updateBalanceByUserId(Long userId, String pin, double balance) {
-		// check the input balance from user is correct
-		if (balance <= 0) {
-			throw new IllegalArgumentException("Balance is invalid for transaction!!! ");
+	public void depositMoney(Long userId, String pin, double amount) {
+		if (amount <= 0) {
+			throw new IllegalArgumentException("Số tiền nạp phải lớn hơn 0.");
 		}
 
 		Account account = findAccountById(userId);
-		// check account null
 		if (account == null) {
-			throw new IllegalArgumentException("Account not found ");
+			throw new IllegalArgumentException("Không tìm thấy tài khoản.");
 		}
-		// check pin
+
 		if (!account.getPinHash().equals(pin)) {
-			throw new IllegalArgumentException("Invalid PIN for userId: " + account.getAccountNumber());
-		}
-		// check balance of the account is valid
-		if (account.getBalance().compareTo(new BigDecimal(-1 * balance)) < 0) {
-			throw new IllegalArgumentException("Invalid balance  ");
+			throw new IllegalArgumentException("Mã PIN không hợp lệ cho tài khoản: " + account.getAccountNumber());
 		}
 
-		// check ATM amount valid ??
-		if (!this.atmService.checkAmountATM(-1 * balance)) {
-			throw new IllegalArgumentException("Invalid amount of ATM for doing transaction ");
-		}
-		if (balance < 0) {
-			// save transaction
-			Transaction transaction = new Transaction(account.getAccountNumber(), "WITHDRAW", LocalDateTime.now(),
-					"Rút tiền " + balance * -1 + " VND");
-			transactionService.saveTransaction(transaction);
-			System.out.println("Transaction saved successfully!");
-		}
+		// Lưu transaction
+		Transaction transaction = new Transaction(account.getAccountNumber(), "DEPOSIT", LocalDateTime.now(),
+				"Nạp " + amount + ".000 VND vào tài khoản");
+		transactionService.saveTransaction(transaction);
+		System.out.println("Transaction saved successfully!");
 
-		if (balance > 0) {
-			// save transaction
-			Transaction transaction = new Transaction(account.getAccountNumber(), "DEPOSIT", LocalDateTime.now(),
-					"Nạp " + balance + ".000 VND vào tai khoản");
-			transactionService.saveTransaction(transaction);
-			System.out.println("Transaction saved successfully!");
-		}
-
-		// update user balance
-		BigDecimal newBalance = account.getBalance().add(BigDecimal.valueOf(balance));
+		// Cập nhật số dư tài khoản
+		BigDecimal newBalance = account.getBalance().add(BigDecimal.valueOf(amount));
 		System.out.println("New balance: " + newBalance);
 		accountRepository.updateBalanceByUserId(userId, newBalance);
 
-		// update ATM Amount
-		this.atmService.updateAmount(balance);
+		// Cập nhật số tiền trong ATM
+		this.atmService.updateAmount(amount);
+	}
+
+	/**
+	 * Rút tiền từ tài khoản
+	 *
+	 * @param userId
+	 * @param pin
+	 * @param amount
+	 */
+	public void withdrawMoney(Long userId, String pin, double amount) {
+		if (amount <= 0) {
+			throw new IllegalArgumentException("Số tiền rút phải lớn hơn 0.");
+		}
+
+		Account account = findAccountById(userId);
+		if (account == null) {
+			throw new IllegalArgumentException("Không tìm thấy tài khoản.");
+		}
+
+		if (!account.getPinHash().equals(pin)) {
+			throw new IllegalArgumentException("Mã PIN không hợp lệ cho tài khoản: " + account.getAccountNumber());
+		}
+
+		if (account.getBalance().compareTo(BigDecimal.valueOf(amount)) < 0) {
+			throw new IllegalArgumentException("Số dư tài khoản không đủ.");
+		}
+
+		if (!this.atmService.checkAmountATM(amount)) {
+			throw new IllegalArgumentException("Số tiền trong ATM không đủ để rút.");
+		}
+
+		// Lưu transaction
+		Transaction transaction = new Transaction(account.getAccountNumber(), "WITHDRAW", LocalDateTime.now(),
+				"Rút tiền " + amount + " VND");
+		transactionService.saveTransaction(transaction);
+		System.out.println("Transaction saved successfully!");
+
+		// Cập nhật số dư tài khoản
+		BigDecimal newBalance = account.getBalance().subtract(BigDecimal.valueOf(amount));
+		System.out.println("New balance: " + newBalance);
+		accountRepository.updateBalanceByUserId(userId, newBalance);
+
+		// Cập nhật số tiền trong ATM
+		this.atmService.updateAmount(-amount);
 	}
 
 	/**
@@ -108,7 +132,6 @@ public class AccountService {
 	 * @param accountNumber the account number that userId want to transfer money
 	 * @param money
 	 */
-
 	public void updateBalanceByAccountNumber(long userId, String pin, String accountNumber, double money) {
 		// check the input balance from user is correct
 		if (money <= 0) {
@@ -168,4 +191,3 @@ public class AccountService {
 		accountRepository.updatePinByUserId(userId, newPIN);
 	}
 }
-
