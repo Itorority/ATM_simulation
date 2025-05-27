@@ -5,28 +5,31 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 
 import group20.example.demo.entity.Transaction;
+import group20.example.demo.model.TransactionModel;
+import group20.example.demo.mapper.EntityModelMapper;
 import group20.example.demo.service.TransactionService;
 
 @Controller
 public class TransactionController {
 
-    private TransactionService transactionService;
+    private final TransactionService transactionService;
 
     public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
     }
 
     /**
-     * Save a transaction by delegating to the service.
+     * Lưu giao dịch mới.
      */
     public Transaction saveTransaction(Transaction transaction) {
         return transactionService.saveTransaction(transaction);
     }
 
     /**
-     * Get transactions by account number, limited by quantity.
+     * Lấy danh sách TransactionModel của một tài khoản (mới nhất trước).
      */
-    public List<Transaction> getTransactionsByAccountNumber(String accountNumber, int quantity) {
-        return transactionService.getAllTransactionsByAccountNumber(accountNumber, quantity);
+    public List<TransactionModel> getTransactionModelsByAccountNumber(String accountNumber, int quantity) {
+        List<Transaction> transactions = transactionService.getAllTransactionsByAccountNumber(accountNumber, quantity);
+        return EntityModelMapper.toTransactionModelList(transactions);
     }
 }

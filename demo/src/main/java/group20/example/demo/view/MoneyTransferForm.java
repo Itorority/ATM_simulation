@@ -1,230 +1,200 @@
 package group20.example.demo.view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import java.awt.*;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import org.springframework.context.ApplicationContext;
 
-import group20.example.demo.controller.AccountController;
-import group20.example.demo.controller.UserController;
+import group20.example.demo.controller.MoneyTransferController;
 import group20.example.demo.model.AccountModel;
 import group20.example.demo.model.UserModel;
 import group20.example.demo.service.AccountService;
-import group20.example.demo.service.UserService;
 
 public class MoneyTransferForm extends JFrame implements IForm {
 	private final ApplicationContext context;
-	private UserModel currentUser;
-	private AccountModel currentAccount;
-	public JTextField numberField;
-	public JTextField pinField;
-	public JTextField moneyField;
+	private final UserModel currentUser;
+	private final AccountModel currentAccount;
 
 	public MoneyTransferForm(ApplicationContext context, UserModel currentUser, AccountModel currentAccount) {
 		this.context = context;
 		this.currentUser = currentUser;
 		this.currentAccount = currentAccount;
 		initUI();
-
 	}
 
 	private void initUI() {
-		setTitle("ATM - Deposit");
-		setLocationRelativeTo(null);
-		setSize(800, 600);
+		setTitle("ATM - Money Transfer");
+		setLocationRelativeTo(null); 
+		setSize(800, 600); 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setResizable(false);
+		setResizable(false); 
 
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.setBackground(new Color(220, 220, 220));
-		setContentPane(panel);
+		// Panel chính sử dụng BorderLayout
+		JPanel mainPanel = new JPanel(new BorderLayout());
+		mainPanel.setBackground(new Color(220, 220, 220));
+		setContentPane(mainPanel);
 
-		JPanel jpTop = new JPanel(new BorderLayout());
-		jpTop.setOpaque(false);
-		jpTop.setBorder(new EmptyBorder(20, 30, 20, 30));
+		// ===== Panel trên cùng: chứa logo và hotline =====
+		JPanel topPanel = new JPanel();
+		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
+		topPanel.setOpaque(false);
+		topPanel.setBorder(new EmptyBorder(20, 30, 20, 30));
 
+		// Logo ATM
 		JLabel labLogo = new JLabel("ATM Simulator");
 		labLogo.setFont(new Font("Arial", Font.BOLD, 25));
-		jpTop.add(labLogo, BorderLayout.WEST);
+		topPanel.add(labLogo);
 
+		topPanel.add(Box.createHorizontalGlue()); 
+		// Panel hotline
 		JPanel jpHotline = new JPanel();
 		jpHotline.setLayout(new BoxLayout(jpHotline, BoxLayout.Y_AXIS));
 		jpHotline.setOpaque(false);
 
 		JLabel labHot1 = new JLabel("HOTLINE ATM");
 		labHot1.setFont(new Font("Arial", Font.PLAIN, 15));
+
 		JLabel labHot2 = new JLabel("1900 1010 - 1010 1900");
 		labHot2.setFont(new Font("Arial", Font.PLAIN, 15));
+
 		jpHotline.add(labHot1);
 		jpHotline.add(labHot2);
+		topPanel.add(jpHotline);
 
-		jpTop.add(jpHotline, BorderLayout.EAST);
-		panel.add(jpTop, BorderLayout.NORTH);
+		mainPanel.add(topPanel, BorderLayout.NORTH); 
 
-		// Content Panel
+		// ===== Panel nội dung chính =====
 		JPanel contentPanel = new JPanel();
 		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 		contentPanel.setOpaque(false);
 
-		JLabel englishMessage = new JLabel("Money Tranfer");
-		JLabel vietnameseMessage = new JLabel("Chuyển tiền");
+		// Tiêu đề
+		JLabel titleEN = new JLabel("Money Transfer");
+		titleEN.setFont(new Font("Arial", Font.BOLD, 25));
+		titleEN.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		englishMessage.setFont(new Font("Arial", Font.PLAIN, 25));
-		englishMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
-		vietnameseMessage.setFont(new Font("Arial", Font.PLAIN, 25));
-		vietnameseMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
+		JLabel titleVN = new JLabel("Chuyển tiền");
+		titleVN.setFont(new Font("Arial", Font.PLAIN, 25));
+		titleVN.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		JLabel profileMessage = new JLabel("Người nhận");
-		profileMessage.setFont(new Font("Arial", Font.PLAIN, 25));
-		profileMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
+		contentPanel.add(titleEN);
+		contentPanel.add(titleVN);
+		contentPanel.add(Box.createVerticalStrut(20)); 
 
-		JPanel profilePanel = new JPanel();
-		profilePanel.setLayout(new BoxLayout(profilePanel, BoxLayout.Y_AXIS));
-		profilePanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-		profilePanel.setBackground(Color.WHITE);
-		// Thay phần profilePanel bằng đoạn code sau:
+		// Các ô nhập liệu
+		JTextField accountNumberField = new JTextField(); // số tài khoản người nhận
+		JTextField pinField = new JPasswordField(); // mã PIN người gửi
+		JTextField moneyField = new JTextField(); // số tiền cần chuyển
 
-		// Thay thế JLabel userLabel và userIDLabel bằng JTextField
-		JLabel numberLabel = new JLabel("Số Tài Khoản người nhận:");
-		numberLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-		numberLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		JLabel recipientLabel = new JLabel("Nhập số tài khoản người nhận:");
+		JLabel pinLabel = new JLabel("Nhập mã PIN:");
+		JLabel amountLabel = new JLabel("Nhập số tiền cần chuyển:");
 
-		numberField = new JTextField();
-		numberField.setMaximumSize(new Dimension(300, 30)); // Giới hạn kích thước
-		numberField.setFont(new Font("Arial", Font.PLAIN, 18));
-		numberField.setAlignmentX(Component.CENTER_ALIGNMENT);
+		Font labelFont = new Font("Arial", Font.PLAIN, 20);
+		recipientLabel.setFont(labelFont);
+		pinLabel.setFont(labelFont);
+		amountLabel.setFont(labelFont);
 
-		JLabel pinLabel = new JLabel("Mã Pin :");
-		pinLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+		recipientLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		pinLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		amountLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		pinField = new JTextField();
-		pinField.setMaximumSize(new Dimension(300, 30)); // Giới hạn kích thước
-		pinField.setFont(new Font("Arial", Font.PLAIN, 18));
+		accountNumberField.setAlignmentX(Component.CENTER_ALIGNMENT);
 		pinField.setAlignmentX(Component.CENTER_ALIGNMENT);
+		moneyField.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		// Thêm vào profilePanel
-		profilePanel.add(Box.createVerticalStrut(10));
-		profilePanel.add(numberLabel);
-		profilePanel.add(numberField);
-		profilePanel.add(Box.createVerticalStrut(10));
-		profilePanel.add(pinLabel);
-		profilePanel.add(pinField);
-		profilePanel.add(Box.createVerticalStrut(10));
+		// Kích thước của ô input
+		int inputWidth = 400;
+		int inputHeight = 40;
 
-		moneyField = new JTextField();
-		JLabel moneyText = new JLabel("Nhập số tiền cần chuyển");
-		moneyText.setFont(new Font("Arial", Font.PLAIN, 25));
-		moneyText.setAlignmentX(Component.CENTER_ALIGNMENT);
+		accountNumberField.setMaximumSize(new Dimension(inputWidth, inputHeight));
+		pinField.setMaximumSize(new Dimension(inputWidth, inputHeight));
+		moneyField.setMaximumSize(new Dimension(inputWidth, inputHeight));
 
-		JPanel line = new JPanel();
-		line.setPreferredSize(new Dimension(0, 1));
-		line.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
-		line.setBackground(Color.GRAY);
+		Font inputFont = new Font("Arial", Font.PLAIN, 20);
+		accountNumberField.setFont(inputFont);
+		pinField.setFont(inputFont);
+		moneyField.setFont(inputFont);
 
+		contentPanel.add(Box.createVerticalStrut(10));
+		contentPanel.add(recipientLabel);
+		contentPanel.add(accountNumberField);
+		contentPanel.add(Box.createVerticalStrut(10));
+		contentPanel.add(pinLabel);
+		contentPanel.add(pinField);
+		contentPanel.add(Box.createVerticalStrut(10));
+		contentPanel.add(amountLabel);
+		contentPanel.add(moneyField);
+		contentPanel.add(Box.createVerticalStrut(30));
+
+		// ===== Các nút xác nhận và hủy =====
 		JButton confirmButton = new JButton("Xác nhận");
-		confirmButton.addActionListener(e -> {
-			Long userId = currentUser.getUserId();
-			String pin = pinField.getText().trim();
-			String accountNumber = numberField.getText().trim();
-			Double amount = Double.parseDouble(moneyField.getText().trim());
-			this.transferMoney(userId, pin, accountNumber, amount);
-
-		});
 		JButton cancelButton = new JButton("Hủy bỏ");
-		cancelButton.addActionListener(e -> onButtonCancel());
 
-		Dimension buttonSize = new Dimension(200, 100);
-		confirmButton.setPreferredSize(buttonSize);
-		cancelButton.setPreferredSize(buttonSize);
-		confirmButton.setMaximumSize(buttonSize);
-		cancelButton.setMaximumSize(buttonSize);
 		confirmButton.setFont(new Font("Arial", Font.BOLD, 18));
 		cancelButton.setFont(new Font("Arial", Font.BOLD, 18));
+		
+		confirmButton.setBackground(Color.BLUE);
+		confirmButton.setForeground(Color.WHITE);
 
+		cancelButton.setBackground(Color.BLUE);
+		cancelButton.setForeground(Color.WHITE);
+
+		// Panel chứa nút
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setOpaque(false);
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 		buttonPanel.add(Box.createHorizontalGlue());
 		buttonPanel.add(cancelButton);
-		buttonPanel.add(Box.createHorizontalStrut(200));
+		buttonPanel.add(Box.createHorizontalStrut(50));
 		buttonPanel.add(confirmButton);
 		buttonPanel.add(Box.createHorizontalGlue());
 
-		contentPanel.add(Box.createVerticalStrut(20));
-		contentPanel.add(englishMessage);
-		contentPanel.add(vietnameseMessage);
-		contentPanel.add(Box.createVerticalStrut(20));
-		contentPanel.add(profileMessage);
-		contentPanel.add(profilePanel);
-		contentPanel.add(line);
-		contentPanel.add(Box.createVerticalStrut(20));
-		contentPanel.add(moneyText);
-		contentPanel.add(moneyField);
-		contentPanel.add(Box.createVerticalStrut(30));
+		// Thêm button panel vào content panel
 		contentPanel.add(buttonPanel);
+		contentPanel.setBorder(new EmptyBorder(30, 100, 50, 100));
 
-		contentPanel.setBorder(new EmptyBorder(50, 0, 0, 0));
-		panel.add(contentPanel, BorderLayout.CENTER);
+		mainPanel.add(contentPanel, BorderLayout.CENTER); 
+
+		// ===== Xử lý sự kiện nút =====
+		AccountService accountService = context.getBean(AccountService.class);
+		MoneyTransferController controller = new MoneyTransferController(accountService, currentAccount);
+
+		// Sự kiện khi bấm nút "Xác nhận"
+		confirmButton.addActionListener(e -> {
+			try {
+				String recipientAccount = accountNumberField.getText().trim(); // tài khoản nhận
+				String pin = pinField.getText().trim(); // mã PIN
+				double amount = Double.parseDouble(moneyField.getText().trim()); // số tiền chuyển
+
+				controller.transfer(currentUser.getUserId(), pin, recipientAccount, amount); // gọi controller xử lý
+
+				JOptionPane.showMessageDialog(this, "Chuyển tiền thành công!");
+
+				// Quay lại màn hình chính
+				MainForm mainForm = MainForm.getInstance(context, currentUser, currentAccount);
+				mainForm.setVisible(true);
+				mainForm.setLocationRelativeTo(null);
+				dispose();
+
+			} catch (Exception ex) {
+				// Hiển thị thông báo lỗi nếu có ngoại lệ
+				JOptionPane.showMessageDialog(this, "Lỗi: " + ex.getMessage(), "Chuyển tiền thất bại", JOptionPane.ERROR_MESSAGE);
+			}
+		});
+
+		// Sự kiện khi bấm nút "Hủy bỏ"
+		cancelButton.addActionListener(e -> {
+			MainForm mainForm = MainForm.getInstance(context, currentUser, currentAccount);
+			mainForm.setVisible(true);
+			mainForm.setLocationRelativeTo(null);
+			dispose();
+		});
 	}
 
 	@Override
 	public void showForm() {
-		// TODO Auto-generated method stub
 		this.setVisible(true);
-	}
-
-	private void onButtonCancel() {
-		MainForm mainForm = MainForm.getInstance(context, currentUser, currentAccount);
-		mainForm.setLocationRelativeTo(null);
-		mainForm.setVisible(true);
-		dispose();
-	}
-
-	/**
-	 * funtion to transfer money to another account
-	 * 
-	 * @param email         the email of the receiver
-	 * @param accountNumber the account number of the receiver
-	 * @param amount        the amount of money to transfer
-	 * 
-	 */
-
-	private void transferMoney(Long id, String pin, String accountNumber, double amount) {
-		UserService userService = context.getBean(UserService.class);
-
-		UserController userController = new UserController(userService);
-
-		AccountService accountService = context.getBean(AccountService.class);
-		AccountController accountController = new AccountController(accountService);
-		try {
-			userController.transferMoney(id, pin, accountNumber, amount);
-			dispose();
-			JOptionPane.showMessageDialog(this, "Chuyển tiền thành công!");
-
-			// Cập nhật lại thông tin tài khoản
-			AccountModel updatedAccount = accountController.findAccountById(id);
-			System.out.println("Updated Account: " + updatedAccount.getBalance());
-			MainForm mainForm = MainForm.getInstance(context, currentUser, updatedAccount);
-			mainForm.setVisible(true);
-			mainForm.setLocationRelativeTo(null);
-			dispose();
-		} catch (IllegalArgumentException e) {
-			JOptionPane.showMessageDialog(this, e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-		}
 	}
 }
