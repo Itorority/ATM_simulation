@@ -12,7 +12,7 @@ import group20.example.demo.model.UserModel;
 import group20.example.demo.service.AccountService;
 import group20.example.demo.service.UserService;
 
-public class DepositPINForm extends JFrame implements IForm {
+public class DepositPINForm extends JFrame {
 
     private JTextField textPIN;
     private ApplicationContext context;
@@ -156,10 +156,5 @@ public class DepositPINForm extends JFrame implements IForm {
         backToDeposit.setVisible(true);
         backToDeposit.setLocationRelativeTo(null);
         dispose();
-    }
-
-    @Override
-    public void showForm() {
-        this.setVisible(true);
     }
 }
