@@ -20,7 +20,11 @@ public class ConfirmWithDrawController {
 	// xác nhận rút tiền và số tiền mới của tài khoản sau khi rút
 	public AccountModel confirmWithDraw(UserModel currentUser, AccountModel currentAccount, double amount) {
 		userController.withdrawMoney(currentUser.getUserId(), currentAccount.getPinHash(), amount);
-		return accountController.findAccountById(currentUser.getUserId());
- 
+		
+	    AccountModel updatedAccount = accountController.findAccountById(currentUser.getUserId());
+
+	    currentAccount.setBalance(updatedAccount.getBalance());
+
+	    return currentAccount;
 	}
 }
