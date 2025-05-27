@@ -21,7 +21,7 @@ import group20.example.demo.service.UserService;
  * Lớp LoginForm đại diện cho giao diện đăng nhập của ứng dụng ATM.
  * Sử dụng Swing để xây dựng giao diện, tích hợp Spring để quản lý logic backend.
  */
-public class LoginForm extends JFrame {
+public class LoginForm extends JFrame implements IForm {
 
     private JTextField usernameField;
     private JPasswordField passwordField;
@@ -162,4 +162,9 @@ public class LoginForm extends JFrame {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
+    	@Override
+	public void showForm() {
+		// TODO Auto-generated method stub
+		
+	}
 }
