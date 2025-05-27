@@ -53,4 +53,17 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
   @Query("SELECT a FROM Account a WHERE a.accountNumber = :accountNumber")
   public Account findByAccountNumber(@Param("accountNumber") String accountNumber);
 
+   /**
+   * update pin
+   * 
+   * @param userId
+   * @param newPIN
+   * @return
+   * 
+   */
+  @Modifying
+  @Transactional
+  @Query("UPDATE Account a SET a.pinHash = :newPin WHERE a.userId = :userId")
+  public void updatePinByUserId(@Param("userId") Long userId, @Param("newPin") String newPin);
+  
 }
