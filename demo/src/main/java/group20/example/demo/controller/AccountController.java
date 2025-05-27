@@ -37,7 +37,7 @@ public class AccountController {
 	}
 	
 	//Cập nhật mã PIN mới
-	public void changePIN(Long userId, String newPIN2) {
-		accountService.changePIN(userId, newPIN2);
+	public void changePIN(Long userId, String newPIN) {
+		accountService.changePIN(userId, newPIN);
 	}
 }
