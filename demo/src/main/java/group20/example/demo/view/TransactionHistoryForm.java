@@ -155,7 +155,7 @@ public class TransactionHistoryForm extends JFrame implements IForm {
         bottomPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
         JButton btnCancel = new JButton("Hủy");
-        btnCancel.setFont(new Font("Arial", Font.BOLD, 18));
+        btnCancel.setFont(new Font("Arial", Font.BOLD, 25));
         btnCancel.setPreferredSize(new Dimension(120, 40));
         btnCancel.setBackground(Color.BLUE);
         btnCancel.setForeground(Color.WHITE);
