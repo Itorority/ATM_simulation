@@ -12,7 +12,7 @@ import group20.example.demo.view.LoginForm;
 public class AtmSimulationApplication {
 
 	public static void main(String[] args) {
-
+		System.setProperty("java.awt.headless", "false"); // ← Dòng này rất quan trọng
 		ApplicationContext context = SpringApplication.run(AtmSimulationApplication.class);
 		System.out.println("Frame chính sẽ bắt đầu từ line tiếp theo");
 

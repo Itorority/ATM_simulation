@@ -18,6 +18,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import org.springframework.context.ApplicationContext;
+
+
+import group20.example.demo.controller.UserController;
 import group20.example.demo.model.AccountModel;
 import group20.example.demo.model.UserModel;
 
@@ -26,8 +29,11 @@ public class DepositForm extends JFrame implements IForm {
 	private final ApplicationContext context;
 	private UserModel currentUser;
 	private AccountModel currentAccount;
+	private UserController controller;
+	
 
 	public DepositForm(ApplicationContext context, UserModel currentUser, AccountModel currentAccount) {
+		this.controller = context.getBean(UserController.class);
 		this.context = context;
 		this.currentUser = currentUser;
 		this.currentAccount = currentAccount;
@@ -116,7 +122,45 @@ public class DepositForm extends JFrame implements IForm {
 
 		contentPanel.setBorder(new EmptyBorder(50, 0, 0, 0));
 		panel.add(contentPanel, BorderLayout.CENTER);
+		confirmButton.addActionListener(e -> {
+			try {
+				String moneyTextValue = moneyField.getText().trim();
+				if (moneyTextValue.isEmpty()) {
+					javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng nhập số tiền!");
+					return;
+				}
+
+				double money = Double.parseDouble(moneyTextValue);
+				if (money <= 0) {
+					javax.swing.JOptionPane.showMessageDialog(this, "Số tiền phải lớn hơn 0!");
+					return;
+				}
+				
+				// Mở form nhập PIN cho nạp tiền
+				DepositPINForm pinForm = new DepositPINForm(context, currentUser, currentAccount, money);
+				pinForm.setVisible(true);
+				pinForm.setLocationRelativeTo(null);
+				dispose();
+				
+			} catch (NumberFormatException ex) {
+				javax.swing.JOptionPane.showMessageDialog(this, "Số tiền không hợp lệ!");
+			} catch (Exception ex) {
+				javax.swing.JOptionPane.showMessageDialog(this, "Có lỗi: " + ex.getMessage());
+			}
+		});
+
+		cancelButton.addActionListener(e -> {
+			new MainForm(context, currentUser, currentAccount).setVisible(true);
+			this.dispose();
+		});
+
 	}
+
+	public void depositMoney(Long id, String pin, double money) {
+		this.controller.depositMoney(id, pin, money);
+
+	}
+	
 
 	@Override
 	public void showForm() {

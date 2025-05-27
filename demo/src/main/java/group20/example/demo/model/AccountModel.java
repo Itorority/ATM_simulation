@@ -1,6 +1,8 @@
 package group20.example.demo.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccountModel {
 
@@ -11,6 +13,8 @@ public class AccountModel {
     private String pinHash;
 
     private BigDecimal balance;
+    
+    private final List<ChangeListener> listeners = new ArrayList<>();
 
     // Constructors
     public AccountModel() {
@@ -54,6 +58,18 @@ public class AccountModel {
 
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
+        notifyBalanceChanged();
+    }
+    
+
+    public void addBalanceChangeListener(ChangeListener listener) {
+        listeners.add(listener);
+    }
+
+    private void notifyBalanceChanged() {
+        for (ChangeListener listener : listeners) {
+            listener.onBalanceChanged(this.balance);
+        }
     }
 
     @Override

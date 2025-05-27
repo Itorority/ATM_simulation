@@ -21,49 +21,63 @@ public class MainController {
         this.account = account;
     }
 
+    // Mở form rút tiền, truyền vào JFrame hiện tại để chuyển đổi màn hình
     public void openWithdrawForm(JFrame currentFrame) {
-        IForm form = FormFactory.createForm(FormType.WITHDRAW, context, user, account);
-        openForm(form, currentFrame);
+        openForm(FormType.WITHDRAW, currentFrame);
     }
 
+    // Mở form nạp tiền
     public void openDepositForm(JFrame currentFrame) {
-        IForm form = FormFactory.createForm(FormType.DEPOSIT, context, user, account);
-        openForm(form, currentFrame);
+        openForm(FormType.DEPOSIT, currentFrame);
     }
 
+    // Mở form chuyển tiền
     public void openTransferForm(JFrame currentFrame) {
-        IForm form = FormFactory.createForm(FormType.TRANSFER, context, user, account);
-        openForm(form, currentFrame);
+        openForm(FormType.TRANSFER, currentFrame);
     }
 
+    // Mở form thay đổi mã PIN
     public void openPinForm(JFrame currentFrame) {
-        IForm form = FormFactory.createForm(FormType.PIN, context, user, account);
-        openForm(form, currentFrame);
+        openForm(FormType.PIN, currentFrame);
     }
 
+    // Mở form xem thông tin cá nhân
     public void openProfileForm(JFrame currentFrame) {
-        IForm form = FormFactory.createForm(FormType.PROFILE, context, user, account);
-        openForm(form, currentFrame);
+        openForm(FormType.PROFILE, currentFrame);
     }
 
-    private void openForm(IForm form, JFrame currentFrame) {
+    // Mở form xem lịch sử giao dịch
+    public void openTransactionHistoryForm(JFrame currentFrame) {
+        openForm(FormType.HISTORY, currentFrame);
+    }
+
+    // Hàm hỗ trợ mở form theo kiểu FormType
+    private void openForm(FormType type, JFrame currentFrame) {
+        // Tạo form mới dựa theo loại form, truyền context, user, account
+        IForm form = FormFactory.createForm(type, context, user, account);
         if (form instanceof JFrame frame) {
             frame.setLocation(currentFrame.getLocation());
             frame.setVisible(true);
             currentFrame.dispose();
         }
     }
-    
+
+    // Cập nhật số dư tài khoản
     public void updateBalance(double newBalance) {
         AccountController accountController = context.getBean(AccountController.class);
 
-        Long userId = user.getUserId(); 
+        Long userId = user.getUserId();
         String pin = account.getPinHash();
 
+        // Cập nhật số dư tài khoản trong cơ sở dữ liệu dựa trên userId và pin
         accountController.updateBalanceByUserId(userId, pin, newBalance);
 
+        // Lấy thông tin tài khoản mới cập nhật từ DB
         AccountModel updatedAccount = accountController.findAccountById(userId);
-        account.setBalance(updatedAccount.getBalance());
-    }
 
+        // Nếu có thông tin tài khoản mới, cập nhật số dư trong account hiện tại để đồng bộ
+        if (updatedAccount != null) {
+            account.setBalance(updatedAccount.getBalance());
+        }
+    }
 }

@@ -19,9 +19,14 @@ import org.springframework.context.ApplicationContext;
 
 import group20.example.demo.controller.MainController;
 import group20.example.demo.model.AccountModel;
+import group20.example.demo.model.ChangeListener;
 import group20.example.demo.model.UserModel;
 
-public class MainForm extends JFrame implements IForm {
+/**
+ * MainForm là cửa sổ chính sau khi người dùng đăng nhập thành công.
+ * Hiển thị thông tin người dùng, số dư tài khoản và các chức năng chính của ATM.
+ */
+public class MainForm extends JFrame implements IForm, ChangeListener {
 
     private static MainForm instance;
     private final ApplicationContext context;
@@ -29,18 +34,39 @@ public class MainForm extends JFrame implements IForm {
     private UserModel currentUser;
     private AccountModel currentAccount;
 
+    private JLabel balanceLabel;
+
     public MainForm(ApplicationContext context, UserModel user, AccountModel account) {
         this.context = context;
         this.currentUser = user;
         this.currentAccount = account;
+
+        // Lắng nghe thay đổi số dư tài khoản
+        if (currentAccount != null) {
+            currentAccount.addBalanceChangeListener(this);
+        }
+
         initUI();
     }
 
+    /**
+     * Singleton pattern để chỉ tạo một instance duy nhất của MainForm.
+     */
     public static MainForm getInstance(ApplicationContext context, UserModel user, AccountModel account) {
         if (instance == null) {
             instance = new MainForm(context, user, account);
         }
         return instance;
+    }
+
+    /**
+     * Reset lại instance hiện tại (để đăng xuất hoặc tạo form mới).
+     */
+    public static void resetInstance() {
+        if (instance != null) {
+            instance.dispose(); // Đóng cửa sổ hiện tại
+            instance = null;    // Xoá instance
+        }
     }
 
     public ApplicationContext getApplicationContext() {
@@ -54,14 +80,17 @@ public class MainForm extends JFrame implements IForm {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
 
+        // Panel chính
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(new Color(220, 220, 220));
         setContentPane(panel);
 
+        // Panel trên cùng hiển thị thông tin người dùng và hotline
         JPanel jpTop = new JPanel(new BorderLayout());
         jpTop.setOpaque(false);
         jpTop.setBorder(new EmptyBorder(20, 30, 20, 30));
 
+        // Panel logo + user info
         JPanel logoPanel = new JPanel();
         logoPanel.setLayout(new BoxLayout(logoPanel, BoxLayout.Y_AXIS));
         logoPanel.setOpaque(false);
@@ -75,7 +104,7 @@ public class MainForm extends JFrame implements IForm {
         usernameLabel.setForeground(Color.DARK_GRAY);
 
         String balanceText = "Số dư: " + (currentAccount != null ? String.format("%,.0f VNĐ", currentAccount.getBalance()) : "0 VNĐ");
-        JLabel balanceLabel = new JLabel(balanceText);
+        balanceLabel = new JLabel(balanceText);
         balanceLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         balanceLabel.setForeground(Color.DARK_GRAY);
 
@@ -83,19 +112,23 @@ public class MainForm extends JFrame implements IForm {
         logoPanel.add(usernameLabel);
         logoPanel.add(balanceLabel);
 
+        // Nút truy cập hồ sơ người dùng
         JButton profileButton = new JButton("Hồ sơ");
         profileButton.setFont(new Font("Arial", Font.BOLD, 18));
         profileButton.setBackground(new Color(30, 144, 255));
         profileButton.setForeground(Color.WHITE);
-       
+
+        // Panel chứa nút hồ sơ
         JPanel profilePanel = new JPanel();
         profilePanel.setOpaque(false);
         profilePanel.add(profileButton);
 
-        jpTop.add(profilePanel, BorderLayout.CENTER); // hoặc EAST nếu muốn
+        // Gắn các thành phần lên panel trên
+        jpTop.add(profilePanel, BorderLayout.CENTER);
         logoPanel.add(profileButton);
         jpTop.add(logoPanel, BorderLayout.WEST);
 
+        // Panel hotline phía bên phải
         JPanel jpHotline = new JPanel();
         jpHotline.setLayout(new BoxLayout(jpHotline, BoxLayout.Y_AXIS));
         jpHotline.setOpaque(false);
@@ -103,21 +136,23 @@ public class MainForm extends JFrame implements IForm {
         JLabel labHot1 = new JLabel("HOTLINE ATM");
         labHot1.setFont(new Font("Arial", Font.PLAIN, 15));
         labHot1.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        
+
         JLabel labHot2 = new JLabel("1900 1010 - 1010 1900");
         labHot2.setFont(new Font("Arial", Font.PLAIN, 15));
         labHot2.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        
+
         jpHotline.add(labHot1);
         jpHotline.add(labHot2);
 
         jpTop.add(jpHotline, BorderLayout.EAST);
         panel.add(jpTop, BorderLayout.NORTH);
 
+        // Panel nội dung chính
         JPanel contentPanel = new JPanel(null);
         contentPanel.setOpaque(false);
         panel.add(contentPanel, BorderLayout.CENTER);
 
+        // Tiêu đề chào mừng
         JLabel welcomeLabel = new JLabel("Chào mừng đến với hệ thống ATM");
         welcomeLabel.setFont(new Font("Arial", Font.BOLD, 30));
         welcomeLabel.setBounds(155, 60, 500, 40);
@@ -130,51 +165,56 @@ public class MainForm extends JFrame implements IForm {
         instructionLabel.setBounds(270, 120, 300, 30);
         contentPanel.add(instructionLabel);
 
+        // Các nút chức năng giao dịch
         JButton rutTienBtn = new JButton("Rút tiền");
-        rutTienBtn.setBounds(150, 200, 200, 50);
-        JButton chuyenKhoanBtn = new JButton("Chuyển khoản");
-        chuyenKhoanBtn.setBounds(450, 200, 200, 50);
-        JButton napTienBtn = new JButton("Nạp tiền");
-        napTienBtn.setBounds(150, 280, 200, 50);
-        JButton doiPinBtn = new JButton("Đổi PIN");
-        doiPinBtn.setBounds(450, 280, 200, 50);
+        rutTienBtn.setBounds(150, 170, 200, 50);
 
-        for (JButton btn : new JButton[] { rutTienBtn, chuyenKhoanBtn, napTienBtn, doiPinBtn }) {
+        JButton chuyenKhoanBtn = new JButton("Chuyển khoản");
+        chuyenKhoanBtn.setBounds(450, 170, 200, 50);
+
+        JButton napTienBtn = new JButton("Nạp tiền");
+        napTienBtn.setBounds(150, 250, 200, 50);
+
+        JButton doiPinBtn = new JButton("Đổi PIN");
+        doiPinBtn.setBounds(450, 250, 200, 50);
+
+        JButton lichSuGiaoDichBtn = new JButton("Lịch sử giao dịch");
+        lichSuGiaoDichBtn.setBounds(150, 330, 200, 50);
+
+        // Cài đặt style cho các nút
+        for (JButton btn : new JButton[] { rutTienBtn, chuyenKhoanBtn, napTienBtn, doiPinBtn, lichSuGiaoDichBtn }) {
             btn.setFont(new Font("Arial", Font.BOLD, 20));
             btn.setForeground(Color.WHITE);
             btn.setBackground(Color.BLUE);
             contentPanel.add(btn);
         }
 
+        // Tạo controller để điều hướng các chức năng
         MainController controller = new MainController(context, currentUser, currentAccount);
 
+        // Gán sự kiện cho các nút
         rutTienBtn.addActionListener(e -> controller.openWithdrawForm(this));
         napTienBtn.addActionListener(e -> controller.openDepositForm(this));
         chuyenKhoanBtn.addActionListener(e -> controller.openTransferForm(this));
         doiPinBtn.addActionListener(e -> controller.openPinForm(this));
         profileButton.addActionListener(e -> controller.openProfileForm(this));
+        lichSuGiaoDichBtn.addActionListener(e -> controller.openTransactionHistoryForm(this));
+    }
+    /**
+     * Hiển thị form chính.
+     */
+    @Override
+    public void showForm() {
+        this.setVisible(true);
     }
 
-    public static void main(String[] args) {
+    /**
+     * Gọi khi số dư thay đổi để cập nhật hiển thị.
+     */
+    @Override
+    public void onBalanceChanged(BigDecimal newBalance) {
         SwingUtilities.invokeLater(() -> {
-            UserModel mockUser = new UserModel();
-            mockUser.setFullName("Nguyễn Văn A");
-            //mockUser.setUserId("user123");
-            mockUser.setEmail("nguyenvana@email.com");
-            mockUser.setPhoneNumber("0909123456");
-
-            AccountModel mockAccount = new AccountModel();
-            mockAccount.setBalance(new BigDecimal("10000000")); // 10 triệu
-            mockAccount.setPinHash("1234");
-
-            MainForm mainForm = new MainForm(null, mockUser, mockAccount);
-            mainForm.setVisible(true);
+            balanceLabel.setText("Số dư: " + String.format("%,.0f VNĐ", newBalance));
         });
     }
-
-	@Override
-	public void showForm() {
-		// TODO Auto-generated method stub
-		this.setVisible(true);
-	}
 }
