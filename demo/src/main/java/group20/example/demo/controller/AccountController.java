@@ -28,7 +28,7 @@ public class AccountController {
 
 	// Cập nhật số dư account bằng UserID
 	public void updateBalanceByUserId(Long userId, String pin, double balance) {
-		accountService.updateBalanceByUserId(userId, pin, balance);
+		accountService.withdrawMoney(userId, pin, balance);
 	}
 
 	// Cập nhật số dư Account bằng AccountNumber
