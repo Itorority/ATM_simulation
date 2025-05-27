@@ -6,5 +6,6 @@ public enum FormType {
 	DEPOSIT,
 	TRANSFER,
 	PIN,
-	PROFILE
+	PROFILE,
+	HISTORY
 }
