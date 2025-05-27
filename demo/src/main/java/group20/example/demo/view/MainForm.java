@@ -88,7 +88,7 @@ public class MainForm extends JFrame implements IForm, ChangeListener {
         // Panel trên cùng hiển thị thông tin người dùng và hotline
         JPanel jpTop = new JPanel(new BorderLayout());
         jpTop.setOpaque(false);
-        jpTop.setBorder(new EmptyBorder(20, 30, 20, 30));
+        jpTop.setBorder(new EmptyBorder(20, 30, 5, 30));
 
         // Panel logo + user info
         JPanel logoPanel = new JPanel();
@@ -155,31 +155,31 @@ public class MainForm extends JFrame implements IForm, ChangeListener {
         // Tiêu đề chào mừng
         JLabel welcomeLabel = new JLabel("Chào mừng đến với hệ thống ATM");
         welcomeLabel.setFont(new Font("Arial", Font.BOLD, 30));
-        welcomeLabel.setBounds(155, 60, 500, 40);
+        welcomeLabel.setBounds(155, 20, 500, 40);
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         contentPanel.add(welcomeLabel);
 
         JLabel instructionLabel = new JLabel("Vui lòng lựa chọn giao dịch:");
         instructionLabel.setFont(new Font("Arial", Font.PLAIN, 23));
         instructionLabel.setForeground(Color.RED);
-        instructionLabel.setBounds(270, 120, 300, 30);
+        instructionLabel.setBounds(270, 70, 300, 30);
         contentPanel.add(instructionLabel);
 
         // Các nút chức năng giao dịch
         JButton rutTienBtn = new JButton("Rút tiền");
-        rutTienBtn.setBounds(150, 170, 200, 50);
+        rutTienBtn.setBounds(150, 140, 200, 50);
 
         JButton chuyenKhoanBtn = new JButton("Chuyển khoản");
-        chuyenKhoanBtn.setBounds(450, 170, 200, 50);
+        chuyenKhoanBtn.setBounds(450, 140, 200, 50);
 
         JButton napTienBtn = new JButton("Nạp tiền");
-        napTienBtn.setBounds(150, 250, 200, 50);
+        napTienBtn.setBounds(150, 210, 200, 50);
 
         JButton doiPinBtn = new JButton("Đổi PIN");
-        doiPinBtn.setBounds(450, 250, 200, 50);
+        doiPinBtn.setBounds(450, 210, 200, 50);
 
         JButton lichSuGiaoDichBtn = new JButton("Lịch sử giao dịch");
-        lichSuGiaoDichBtn.setBounds(150, 330, 200, 50);
+        lichSuGiaoDichBtn.setBounds(150, 280, 200, 50);
 
         // Cài đặt style cho các nút
         for (JButton btn : new JButton[] { rutTienBtn, chuyenKhoanBtn, napTienBtn, doiPinBtn, lichSuGiaoDichBtn }) {
