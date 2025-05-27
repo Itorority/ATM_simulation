@@ -42,6 +42,7 @@ public class PINController {
 	}
 	
 	public AccountModel changePIN(AccountModel currentAccount, String newPIN) {
+		currentAccount.setPinHash(newPIN);
 		accountController.changePIN(currentAccount.getUserId(), newPIN);
 		return accountController.findAccountById(currentAccount.getUserId());
 	}
