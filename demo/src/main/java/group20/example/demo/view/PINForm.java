@@ -27,6 +27,7 @@ import group20.example.demo.model.AccountModel;
 import group20.example.demo.model.UserModel;
 import group20.example.demo.service.AccountService;
 
+// PINForm là màn hình để hiển thị việc nhập mã PIN để xác thực các giao dịch như rút tiền, nạp tiền,...
 public class PINForm extends JFrame implements IForm {
 
 	private JTextField textPIN;
@@ -58,23 +59,23 @@ public class PINForm extends JFrame implements IForm {
 		setSize(800, 600);
 		setResizable(false);
 
-		// Main panel
+		// Panel chính sử dụng BorderLayout
 		JPanel jpMain = new JPanel(new BorderLayout());
 		jpMain.setBackground(new Color(220, 220, 220));
 		setContentPane(jpMain);
 
-		// Top panel
+		// ====== Panel trên hiển thị Logo và Hotline =====
 		JPanel jpTop = new JPanel();
 		jpTop.setLayout(new BoxLayout(jpTop, BoxLayout.X_AXIS));
 		jpTop.setOpaque(false);
 		jpTop.setBorder(new EmptyBorder(20, 30, 20, 30));
 
-		// Logo
+		// Panel logo
 		JLabel labLogo = new JLabel("ATM Simulator");
 		labLogo.setFont(new Font("Arial", Font.BOLD, 25));
 		jpTop.add(labLogo, BorderLayout.WEST);
 
-		// Hotline
+		// Panel Hotline
 		JPanel jpHotline = new JPanel();
 		jpHotline.setLayout(new BoxLayout(jpHotline, BoxLayout.Y_AXIS));
 		jpHotline.setOpaque(false);
@@ -89,16 +90,16 @@ public class PINForm extends JFrame implements IForm {
 		jpTop.add(Box.createHorizontalGlue());
 		jpTop.add(jpHotline, BorderLayout.EAST);
 
-		// Center panel
+		// ===== Panel trung tâm hiển thị nội dung và ô để nhập mã PIN =====
 		JPanel jpCenter = new JPanel();
 		jpCenter.setOpaque(false);
 		jpCenter.setLayout(new BoxLayout(jpCenter, BoxLayout.Y_AXIS));
 		jpCenter.setBorder(new EmptyBorder(20, 30, 20, 30));
 		jpCenter.add(Box.createVerticalGlue());
 
-		// nội dung trong center
+		// Panel chứa nội dung
 		JLabel labContent1 = new JLabel();
-		labContent1.setText("Xin vui lòng nhập mã PIN để đăng nhập");
+		labContent1.setText("Xin vui lòng nhập mã PIN để xác thực");
 		labContent1.setFont(new Font("Arial", Font.BOLD, 38));
 		labContent1.setAlignmentX(CENTER_ALIGNMENT);
 		JLabel labContent2 = new JLabel();
@@ -107,7 +108,7 @@ public class PINForm extends JFrame implements IForm {
 		labContent2.setForeground(Color.RED);
 		labContent2.setAlignmentX(CENTER_ALIGNMENT);
 
-		// field de nhap ma PIN
+		// tạo text để nhập mã PIN
 		textPIN = new JTextField(6);
 		textPIN.setMaximumSize(new Dimension(450, 50));
 		textPIN.setPreferredSize(new Dimension(450, 50));
@@ -123,7 +124,7 @@ public class PINForm extends JFrame implements IForm {
 
 		jpCenter.add(Box.createVerticalGlue());
 
-		// Bottom panel
+		// ===== Panel dưới để hiển thị các nút =====
 		JPanel jpBottom = new JPanel();
 		jpBottom.setOpaque(false);
 		jpBottom.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -134,10 +135,11 @@ public class PINForm extends JFrame implements IForm {
 		jpBtn.setLayout(new BoxLayout(jpBtn, BoxLayout.Y_AXIS));
 		jpBtn.setAlignmentX(RIGHT_ALIGNMENT);
 
-		// 2 button
+		// tạo 2 nút tiếp tục, huỷ bỉ
 		JButton btnContinue = createButton("Tiếp tục");
 		JButton btnCancel = createButton("Huỷ bỏ");
 
+		// Gán sự kiện cho 2 nút
 		btnContinue.addActionListener(e -> onButtonContinue());
 		btnCancel.addActionListener(e -> onButtonCancel());
 
@@ -153,6 +155,7 @@ public class PINForm extends JFrame implements IForm {
 
 	}
 
+	// tạo nút với các định dạng cho sẵn
 	private JButton createButton(String text) {
 		Dimension btnSize = new Dimension(150, 45);
 		JButton btn = new JButton(text);
@@ -166,6 +169,7 @@ public class PINForm extends JFrame implements IForm {
 		return btn;
 	}
 
+	// tạo sự kiện cho nút tiếp tục
 	private void onButtonContinue() {
 		String inputPIN = textPIN.getText();
 		PINController pinController = context.getBean(PINController.class);
@@ -186,7 +190,7 @@ public class PINForm extends JFrame implements IForm {
 			JOptionPane.showMessageDialog(this, ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
 		}
 	}
-
+	// tạo sự kiện cho nút huỷ bỏ
 	private void onButtonCancel() {
 		WithDrawForm backToWithDraw = new WithDrawForm(context, currentUser, currentAccount);
 		backToWithDraw.setVisible(true);
@@ -200,9 +204,4 @@ public class PINForm extends JFrame implements IForm {
 		this.setVisible(true);
 	}
 
-	// public static void main(String[] args) {
-	// SwingUtilities.invokeLater(() -> {
-	// new PINForm().setVisible(true);
-	// });
-	// }
 }

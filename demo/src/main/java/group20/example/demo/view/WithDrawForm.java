@@ -20,6 +20,10 @@ import org.springframework.context.ApplicationContext;
 import group20.example.demo.model.AccountModel;
 import group20.example.demo.model.UserModel;
 
+/*
+ * WithDrawForm là màn hình dùng để thực hiện giao dịch rút tiền
+ * Hiển thị các nút rút tiền với số tiền có sẵn
+ */
 public class WithDrawForm extends JFrame implements IForm {
 
 	private ApplicationContext context;
@@ -41,21 +45,23 @@ public class WithDrawForm extends JFrame implements IForm {
 		setLocationRelativeTo(null);
 		setResizable(false);
 
-		// main panel
+		// Panel chính sử dụng BorderLayout
 		JPanel jpMain = new JPanel(new BorderLayout());
 		jpMain.setBackground(new Color(220, 220, 220));
 		setContentPane(jpMain);
 
-		// top panel
+		// ====== Panel trên hiển thị Logo và Hotline =====
 		JPanel jpTop = new JPanel();
 		jpTop.setLayout(new BoxLayout(jpTop, BoxLayout.X_AXIS));
 		jpTop.setOpaque(false);
 		jpTop.setBorder(new EmptyBorder(20, 30, 20, 30));
-
+		
+		// Panel logo
 		JLabel labLogo = new JLabel("ATM Simulator");
 		labLogo.setFont(new Font("Arial", Font.BOLD, 25));
 		jpTop.add(labLogo);
 
+		// Panel Hotline
 		JPanel jpHotline = new JPanel();
 		jpHotline.setLayout(new BoxLayout(jpHotline, BoxLayout.Y_AXIS));
 		jpHotline.setOpaque(false);
@@ -70,29 +76,33 @@ public class WithDrawForm extends JFrame implements IForm {
 		jpTop.add(Box.createHorizontalGlue());
 		jpTop.add(jpHotline, BorderLayout.EAST);
 
-		// center panel
+		// ===== Panel trung tâm hiển thị nội dung và các button với số tiền cho sẵn =====
 		JPanel jpCenter = new JPanel();
 		jpCenter.setLayout(new BoxLayout(jpCenter, BoxLayout.Y_AXIS));
 		jpCenter.setOpaque(false);
 		jpCenter.setBorder(new EmptyBorder(20, 30, 20, 30));
 		jpCenter.add(Box.createVerticalGlue());
-
+		
+		// Panel nội dung
 		JLabel labContent = new JLabel();
 		labContent.setText("Xin vui lòng chọn số tiền cần rút");
 		labContent.setFont(new Font("Arial", Font.BOLD, 38));
 		labContent.setAlignmentX(CENTER_ALIGNMENT);
-
+		
+		// Panel chứa các nút rút tiền
 		JPanel jpButtonWithDraw = new JPanel();
 		jpButtonWithDraw.setLayout(new BoxLayout(jpButtonWithDraw, BoxLayout.X_AXIS));
 		jpButtonWithDraw.setOpaque(false);
 
+		// Các nút rút tiền với số tiền cho sẵn
 		JButton btn100k = createButton("100.000 VND");
 		JButton btn200k = createButton("200.000 VND");
 		JButton btn500k = createButton("500.000 VND");
 		JButton btn1trieu = createButton("1.000.000 VND");
 		JButton btn2trieu = createButton("2.000.000 VND");
 		JButton btnCancel = createButton("Huỷ bỏ");
-
+		
+		// Gán sự kiện cho các nút
 		addWithDrawAction(btn100k, 100000);
 		addWithDrawAction(btn200k, 200000);
 		addWithDrawAction(btn500k, 500000);
@@ -100,6 +110,7 @@ public class WithDrawForm extends JFrame implements IForm {
 		addWithDrawAction(btn2trieu, 2000000);
 		btnCancel.addActionListener(e -> onButtonCancel());
 
+		// Panel chứa 3 nút bên phải từ 100k -> 500k
 		JPanel jpButtonLeft = new JPanel();
 		jpButtonLeft.setOpaque(false);
 		jpButtonLeft.setLayout(new BoxLayout(jpButtonLeft, BoxLayout.Y_AXIS));
@@ -109,7 +120,8 @@ public class WithDrawForm extends JFrame implements IForm {
 		jpButtonLeft.add(btn200k);
 		jpButtonLeft.add(Box.createVerticalStrut(35));
 		jpButtonLeft.add(btn500k);
-
+		
+		// Panel chứa 3 nút bên trái 1tr,2tr và nút huỷ bỏ
 		JPanel jpButtonRight = new JPanel();
 		jpButtonRight.setOpaque(false);
 		jpButtonRight.setLayout(new BoxLayout(jpButtonRight, BoxLayout.Y_AXIS));
@@ -130,7 +142,7 @@ public class WithDrawForm extends JFrame implements IForm {
 
 		jpCenter.add(Box.createVerticalGlue());
 
-		// bottom panel
+		// ===== Panel dưới chưa nội dung =====
 		JPanel jpBottom = new JPanel();
 		jpBottom.setLayout(new FlowLayout(FlowLayout.CENTER));
 		jpBottom.setOpaque(false);
@@ -145,7 +157,8 @@ public class WithDrawForm extends JFrame implements IForm {
 		jpMain.add(jpBottom, BorderLayout.SOUTH);
 
 	}
-
+	
+	// tạo nút với các định dạng cho sẵn
 	private JButton createButton(String text) {
 		Dimension btnSize = new Dimension(250, 60);
 		JButton btn = new JButton(text);
@@ -159,7 +172,8 @@ public class WithDrawForm extends JFrame implements IForm {
 		return btn;
 
 	}
-
+	
+	// tạo sự kiện cho các nút rút tiền với số tiền cho sẵn
 	private void addWithDrawAction(JButton button, double amount) {
 		button.addActionListener(e -> {
 			ConfirmWithDrawForm confirmForm = new ConfirmWithDrawForm(context, currentUser, currentAccount, amount);
@@ -168,7 +182,8 @@ public class WithDrawForm extends JFrame implements IForm {
 			dispose();
 		});
 	}
-
+	
+	// tạo sự kiện cho nút Cancel
 	private void onButtonCancel() {
 		MainForm mainForm = MainForm.getInstance(context, currentUser, currentAccount);
 		mainForm.setLocationRelativeTo(null);
@@ -176,6 +191,7 @@ public class WithDrawForm extends JFrame implements IForm {
 		dispose();
 	}
 
+	// hiển thị form chính
 	@Override
 	public void showForm() {
 		// TODO Auto-generated method stub
