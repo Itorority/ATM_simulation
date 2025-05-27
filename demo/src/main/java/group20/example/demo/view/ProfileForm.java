@@ -12,7 +12,9 @@ import org.springframework.context.ApplicationContext;
 import group20.example.demo.model.AccountModel;
 import group20.example.demo.model.UserModel;
 
-
+/**
+ * Giao diện hiển thị thông tin hồ sơ người dùng
+ */
 public class ProfileForm extends JFrame implements IForm {
     private ApplicationContext context;
     private MainForm mainForm;
@@ -29,10 +31,13 @@ public class ProfileForm extends JFrame implements IForm {
         this.user = user;
         this.account = account;
 
-        initUI();
+        initUI(); 
         setUserInfo(user, account);
     }
 
+    /**
+     * Hiển thị thông tin người dùng và tài khoản lên các label
+     */
     public void setUserInfo(UserModel user, AccountModel account) {
         userLabel.setText(user != null ? user.getFullName() : "Chưa rõ");
         userIDLabel.setText("User ID: " + (user != null ? user.getUserId() : "N/A"));
@@ -40,6 +45,7 @@ public class ProfileForm extends JFrame implements IForm {
         lblIdentity.setText("SĐT: " + (user != null ? user.getPhoneNumber() : "N/A"));
         lblChangePassword.setText("Mã PIN: " + (account != null ? account.getPinHash() : "N/A"));
 
+        // Định dạng số dư tài khoản
         if (account != null && account.getBalance() != null) {
             BigDecimal balance = account.getBalance();
             NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
@@ -57,12 +63,13 @@ public class ProfileForm extends JFrame implements IForm {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(false);
 
+        // Panel chính
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.setBackground(new Color(220, 220, 220));
         setContentPane(mainPanel);
 
-        // ===== Panel phía trên chứa logo và hotline =====
+        // ===== Panel trên cùng: Logo và hotline =====
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
         topPanel.setOpaque(false);
@@ -72,8 +79,9 @@ public class ProfileForm extends JFrame implements IForm {
         labLogo.setFont(new Font("Arial", Font.BOLD, 25));
         topPanel.add(labLogo);
 
-        topPanel.add(Box.createHorizontalGlue()); // Hotline được đính sang bên phải 
+        topPanel.add(Box.createHorizontalGlue());
 
+        // Thông tin hotline
         JPanel jpHotline = new JPanel();
         jpHotline.setLayout(new BoxLayout(jpHotline, BoxLayout.Y_AXIS));
         jpHotline.setOpaque(false);
@@ -92,18 +100,20 @@ public class ProfileForm extends JFrame implements IForm {
 
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
-        // Content panel
+        // ===== Nội dung chính =====
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setOpaque(false);
         contentPanel.setBorder(new EmptyBorder(20, 150, 20, 150));
 
+        // Tiêu đề
         JLabel titleLabel = new JLabel("HỒ SƠ NGƯỜI DÙNG");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 25));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         contentPanel.add(titleLabel);
         contentPanel.add(Box.createVerticalStrut(20));
 
+        // Panel hiển thị tên và ID
         JPanel profilePanel = new JPanel();
         profilePanel.setLayout(new BoxLayout(profilePanel, BoxLayout.Y_AXIS));
         profilePanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
@@ -126,7 +136,7 @@ public class ProfileForm extends JFrame implements IForm {
         contentPanel.add(profilePanel);
         contentPanel.add(Box.createVerticalStrut(20));
 
-        // Info section
+        // ===== Thông tin chi tiết =====
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
@@ -148,7 +158,7 @@ public class ProfileForm extends JFrame implements IForm {
         contentPanel.add(infoPanel);
         mainPanel.add(contentPanel, BorderLayout.CENTER);
 
-        // Button panel
+        // ===== Các nút điều hướng =====
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
         buttonPanel.setOpaque(false);
 
@@ -171,25 +181,31 @@ public class ProfileForm extends JFrame implements IForm {
         contentPanel.add(Box.createVerticalStrut(20));
         contentPanel.add(buttonPanel);
 
+        // ===== Xử lý sự kiện =====
+        // Khi nhấn nút Thoát
         exitButton.addActionListener(e -> {
             this.dispose();        
             if (mainForm != null) {
-                mainForm.showForm();
+                mainForm.showForm(); // quay lại màn hình chính
             }
         });
 
+        // Khi nhấn nút Đăng xuất
         logoutButton.addActionListener(e -> {
             this.dispose();
             if (mainForm != null) {
-                mainForm.dispose();
+                mainForm.dispose(); // đóng màn hình chính
             }
-            
+
+            // Mở lại màn hình đăng nhập
             LoginForm loginForm = new LoginForm(context);
+            MainForm.resetInstance();
             loginForm.setLocationRelativeTo(null);
             loginForm.setVisible(true);
         });
     }
 
+    // Tạo label hiển thị thông tin
     private JLabel createInfoLabel(String text) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -197,6 +213,7 @@ public class ProfileForm extends JFrame implements IForm {
         return label;
     }
 
+    // Tạo dòng phân cách
     private Component createSeparator() {
         JPanel line = new JPanel();
         line.setPreferredSize(new Dimension(0, 1));
@@ -204,10 +221,9 @@ public class ProfileForm extends JFrame implements IForm {
         line.setBackground(Color.GRAY);
         return line;
     }
-
-	@Override
-	public void showForm() {
-		// TODO Auto-generated method stub
-		this.setVisible(true);
-	}
+    
+    @Override
+    public void showForm() {
+        this.setVisible(true);
+    }
 }
